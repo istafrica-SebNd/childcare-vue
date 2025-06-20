@@ -111,32 +111,32 @@ export const useAuthStore = defineStore('auth', () => {
 
   const checkDomainType = (email: string): 'guardian' | 'public-staff' | 'private-staff' | 'admin' | 'unknown' => {
     const domain = email.split('@')[1]?.toLowerCase()
-    
+
     if (DOMAIN_CONFIG.admin.includes(domain)) {
       return 'admin'
     }
-    
+
     if (DOMAIN_CONFIG.publicStaff.includes(domain)) {
       return 'public-staff'
     }
-    
+
     if (DOMAIN_CONFIG.privateStaff.includes(domain)) {
       return 'private-staff'
     }
-    
+
     if (email === 'guardian@example.com' || domain) {
       return 'guardian'
     }
-    
+
     return 'unknown'
   }
 
   const loginWithIDPorten = async (): Promise<boolean> => {
     isLoading.value = true
-    
+
     // Simulate authentication delay
     await new Promise(resolve => setTimeout(resolve, 500))
-    
+
     // Mock guardian user from ID-Porten
     const guardianUser: User = {
       id: 'id-porten-' + Date.now(),
@@ -145,7 +145,7 @@ export const useAuthStore = defineStore('auth', () => {
       role: 'guardian',
       authMethod: 'id-porten'
     }
-    
+
     user.value = guardianUser
     localStorage.setItem('user', JSON.stringify(guardianUser))
     isLoading.value = false
@@ -154,10 +154,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loginWithEntraID = async (email?: string): Promise<boolean> => {
     isLoading.value = true
-    
+
     // Simulate authentication delay
     await new Promise(resolve => setTimeout(resolve, 500))
-    
+
     const defaultEmail = email || 'caseworker@oslo.kommune.no'
     const staffUser = mockUsers[defaultEmail] || {
       id: 'entra-id-' + Date.now(),
@@ -166,7 +166,7 @@ export const useAuthStore = defineStore('auth', () => {
       role: 'caseworker',
       authMethod: 'entra-id'
     }
-    
+
     user.value = staffUser
     localStorage.setItem('user', JSON.stringify(staffUser))
     isLoading.value = false
@@ -175,10 +175,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (email: string, password?: string): Promise<boolean> => {
     isLoading.value = true
-    
+
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500))
-    
+
     const foundUser = mockUsers[email]
     if (foundUser && (password === 'password' || foundUser.authMethod === 'entra-id')) {
       user.value = foundUser
@@ -186,12 +186,13 @@ export const useAuthStore = defineStore('auth', () => {
       isLoading.value = false
       return true
     }
-    
+
     isLoading.value = false
     return false
   }
 
   const logout = () => {
+    console.log('Logging out')
     user.value = null
     localStorage.removeItem('user')
   }
@@ -209,4 +210,4 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     checkDomainType
   }
-}) 
+})

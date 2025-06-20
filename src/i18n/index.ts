@@ -45,6 +45,14 @@ const messages = {
       consents: 'Consents & Forms',
       dailyEssentials: 'Daily Essentials',
       administrative: 'Administrative',
+      reviewQueue: 'Review Queue',
+      placementManagement: 'Placement Management',
+      newApplication: 'New Application',
+      inProgress: 'In Progress',
+      submitted: 'Submitted',
+      needsFollowUp: 'Needs Follow-up',
+      applications: 'Applications',
+      coreTools: 'Core Tools',
       descriptions: {
         dashboard: 'Overview and status',
         myApplications: 'Track application status',
@@ -52,7 +60,10 @@ const messages = {
         dailySchedule: 'View today\'s activities and schedule',
         attendanceTracking: 'Track daily attendance',
         messages: 'Communication center',
-        payments: 'View invoices and payments'
+        payments: 'View invoices and payments',
+        caseworkerDashboard: 'Caseworker overview and tools',
+        reviewQueue: 'Process pending applications',
+        placementManagement: 'Manage kindergarten placements'
       }
     },
     attendance: {
@@ -149,7 +160,7 @@ const messages = {
     },
     stats: {
       activeApplications: 'Active Applications',
-      placedChildren: 'Placed Children', 
+      placedChildren: 'Placed Children',
       pendingPayments: 'Pending Payments',
       unreadMessages: 'Unread Messages'
     }
@@ -198,6 +209,14 @@ const messages = {
       consents: 'Samtykker og skjemaer',
       dailyEssentials: 'Daglige Essentials',
       administrative: 'Administrative',
+      reviewQueue: 'Søkekø',
+      placementManagement: 'Plassering',
+      newApplication: 'Ny søknad',
+      inProgress: 'Under behandling',
+      submitted: 'Innsendt',
+      needsFollowUp: 'Må følge opp',
+      applications: 'Søknader',
+      coreTools: 'Kjerneverktøy',
       descriptions: {
         dashboard: 'Oversikt og status',
         myApplications: 'Spor søknadsstatus',
@@ -205,7 +224,10 @@ const messages = {
         dailySchedule: 'Se dagens aktiviteter og timeplan',
         attendanceTracking: 'Spor daglig oppmøte',
         messages: 'Kommunikasjonssenter',
-        payments: 'Se fakturaer og betalinger'
+        payments: 'Se fakturaer og betalinger',
+        caseworkerDashboard: 'Oversikt og verktøy for caseworker',
+        reviewQueue: 'Behandle ventende søknader',
+        placementManagement: 'Administrer barnehagesplassering'
       }
     },
     attendance: {
@@ -314,4 +336,4 @@ export const i18n = createI18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages
-}) 
+})

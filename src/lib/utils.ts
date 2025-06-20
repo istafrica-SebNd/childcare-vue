@@ -1,15 +1,38 @@
-import type { Updater } from '@tanstack/vue-table'
 import type { Ref } from 'vue'
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+// Simple class name utility without external dependencies
+export function cn(...classes: (string | undefined | null | false)[]): string {
+  return classes.filter(Boolean).join(' ')
 }
 
-export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref) {
-  ref.value
-    = typeof updaterOrValue === 'function'
-      ? updaterOrValue(ref.value)
-      : updaterOrValue
+// Generic value updater utility
+export function valueUpdater<T>(updaterOrValue: T | ((prev: T) => T), ref: Ref<T>) {
+  ref.value = typeof updaterOrValue === 'function'
+    ? (updaterOrValue as (prev: T) => T)(ref.value)
+    : updaterOrValue
+}
+
+// Additional utility functions for the kindergarten app
+export function formatName(firstName: string, lastName: string): string {
+  return `${firstName} ${lastName}`.trim()
+}
+
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text
+  return text.slice(0, maxLength) + '...'
+}
+
+export function debounce<T extends (...args: unknown[]) => void>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: number
+  return function executedFunction(...args: Parameters<T>) {
+    const later = () => {
+      clearTimeout(timeout)
+      func(...args)
+    }
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
 }

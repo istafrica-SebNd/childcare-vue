@@ -7,8 +7,8 @@ import Tag from 'primevue/tag'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import Skeleton from 'primevue/skeleton'
-import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
-import { 
+import AppBreadcrumb from '@/components/navigation/AppBreadcrumb.vue'
+import {
   Users,
   Calendar,
   MessageSquare,
@@ -178,7 +178,7 @@ const handleNewActivity = () => {
   <div v-else class="space-y-8 animate-fade-in">
     <!-- Breadcrumb Navigation -->
     <AppBreadcrumb />
-    
+
     <!-- Header -->
     <div class="flex justify-between items-center">
       <div>
@@ -199,7 +199,7 @@ const handleNewActivity = () => {
                 <p class="text-2xl font-semibold text-900">{{ stat.value }}</p>
                 <span :class="[
                   'ml-2 text-sm font-medium',
-                  stat.trend === 'up' ? 'text-green-600' : 
+                  stat.trend === 'up' ? 'text-green-600' :
                   stat.trend === 'down' ? 'text-red-600' : 'text-500'
                 ]">
                   {{ stat.change }}
@@ -305,4 +305,4 @@ const handleNewActivity = () => {
       </template>
     </Card>
   </div>
-</template> 
+</template>

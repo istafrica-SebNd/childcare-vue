@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
-import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 
-const router = useRouter()
+defineOptions({
+  name: 'PaymentsPage'
+})
+
 const toast = useToast()
 
 // Reactive state
@@ -67,10 +68,10 @@ const currentFee = computed(() => 3330)
 
 const potentialNewFee = computed(() => {
   if (!isEligibleForReduction.value || !householdIncome.value) return currentFee.value
-  
+
   // Fee calculation based on Norwegian kindergarten fee structure
   if (householdIncome.value < 300000) return 1665
-  if (householdIncome.value < 400000) return 1665  
+  if (householdIncome.value < 400000) return 1665
   if (householdIncome.value < 500000) return 2220
   if (householdIncome.value < 600000) return 2775
   return currentFee.value
@@ -163,10 +164,10 @@ const handleSetupAutoPay = () => {
 
 const handleApplyForReduction = async () => {
   isProcessingApplication.value = true
-  
+
   // Show processing state for 2 seconds
   await new Promise(resolve => setTimeout(resolve, 2000))
-  
+
   isProcessingApplication.value = false
   showFeeReductionModal.value = true
 }
@@ -200,24 +201,25 @@ const formatDate = (dateString: string): string => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 p-6">
-    <!-- Breadcrumb Navigation -->
-    <AppBreadcrumb />
-
-    <!-- Payment Overdue Alert -->
-    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-      <div class="flex items-center space-x-3">
-        <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-          <svg class="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-          </svg>
-        </div>
-        <div>
-          <h3 class="font-semibold text-red-800">Payment Overdue</h3>
-          <p class="text-sm text-red-700">Late fees may apply</p>
-        </div>
+  <!-- Payment Overdue Alert -->
+  <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+    <div class="flex items-center space-x-3">
+      <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+        <svg class="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-red-800">Payment Overdue</h3>
+        <p class="text-sm text-red-700">Late fees may apply</p>
       </div>
     </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="max-w-7xl mx-auto">
+    <!-- Breadcrumb Navigation -->
+    <AppBreadcrumb />
 
     <!-- Outstanding Balance Section -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
@@ -232,7 +234,7 @@ const formatDate = (dateString: string): string => {
           <div>
             <p class="text-sm font-semibold text-red-600 uppercase tracking-wide mb-2">Outstanding Balance</p>
             <h2 class="text-4xl font-bold text-gray-900 mb-4">{{ formatCurrency(paymentSummary.outstandingBalance) }}</h2>
-            
+
             <!-- Due Date & Invoice Count -->
             <div class="flex items-center space-x-6 text-sm text-gray-600">
               <div class="flex items-center space-x-2">
@@ -254,7 +256,7 @@ const formatDate = (dateString: string): string => {
         <!-- Right Side - Payment Actions -->
         <div class="flex flex-col space-y-3 min-w-[280px] max-w-[280px]">
           <!-- Pay Full Amount Button -->
-          <button 
+          <button
             @click="handlePayFullAmount"
             class="bg-red-600 hover:bg-red-700 text-white rounded-lg p-4 transition-colors w-full"
           >
@@ -277,16 +279,16 @@ const formatDate = (dateString: string): string => {
           </button>
 
           <!-- More Payment Options -->
-          <button 
+          <button
             @click="handleMorePaymentOptions"
             class="bg-white border border-gray-300 text-gray-700 rounded-lg p-3 hover:bg-gray-50 transition-colors w-full"
           >
             <div class="flex items-center justify-between">
               <span class="font-medium">More Payment Options</span>
-              <svg 
-                :class="['w-4 h-4 transition-transform duration-200', showPaymentOptions ? 'rotate-180' : '']" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                :class="['w-4 h-4 transition-transform duration-200', showPaymentOptions ? 'rotate-180' : '']"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -295,12 +297,12 @@ const formatDate = (dateString: string): string => {
           </button>
 
           <!-- Expandable Payment Options -->
-          <div 
-            v-if="showPaymentOptions" 
+          <div
+            v-if="showPaymentOptions"
             class="space-y-2 animate-fadeIn w-full"
           >
             <!-- Pay Single Invoice -->
-            <button 
+            <button
               @click="handlePaySingleInvoice"
               class="w-full bg-white border border-gray-200 text-gray-700 rounded-lg p-3 hover:bg-gray-50 hover:border-gray-300 transition-colors"
             >
@@ -318,7 +320,7 @@ const formatDate = (dateString: string): string => {
             </button>
 
             <!-- Pay Partial Amount -->
-            <button 
+            <button
               @click="handlePayPartialAmount"
               class="w-full bg-white border border-gray-200 text-gray-700 rounded-lg p-3 hover:bg-gray-50 hover:border-gray-300 transition-colors"
             >
@@ -336,7 +338,7 @@ const formatDate = (dateString: string): string => {
             </button>
 
             <!-- Setup Auto-Pay -->
-            <button 
+            <button
               @click="handleSetupAutoPay"
               class="w-full bg-white border border-gray-200 text-gray-700 rounded-lg p-3 hover:bg-gray-50 hover:border-gray-300 transition-colors"
             >
@@ -506,7 +508,7 @@ const formatDate = (dateString: string): string => {
               <label class="block text-sm font-medium text-gray-700 mb-2">
                 Total Household Income (NOK)
               </label>
-              <input 
+              <input
                 v-model="householdIncome"
                 type="number"
                 placeholder="e.g. 450000"
@@ -554,7 +556,7 @@ const formatDate = (dateString: string): string => {
                 </div>
 
                 <!-- Apply Button -->
-                <button 
+                <button
                   @click="handleApplyForReduction"
                   :disabled="isProcessingApplication"
                   class="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg p-4 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -635,7 +637,7 @@ const formatDate = (dateString: string): string => {
                   <span class="font-semibold text-amber-800">Income threshold exceeded</span>
                 </div>
                 <p class="text-sm text-amber-700">
-                  Based on your income, you may not qualify for fee reduction. 
+                  Based on your income, you may not qualify for fee reduction.
                   Contact us for a detailed assessment.
                 </p>
               </div>
@@ -672,7 +674,7 @@ const formatDate = (dateString: string): string => {
                 <p class="text-sm text-gray-600">Your complete invoice and payment records</p>
               </div>
             </div>
-            <button 
+            <button
               @click="handleExportAll"
               class="flex items-center space-x-2 px-4 py-2.5 border border-blue-200 text-blue-600 rounded-lg hover:bg-blue-50 transition-all duration-200 font-medium"
             >
@@ -699,8 +701,8 @@ const formatDate = (dateString: string): string => {
             </thead>
             <!-- Table Body -->
             <tbody class="bg-white">
-              <tr v-for="(payment, index) in paymentHistory" :key="payment.invoiceNumber" 
-                  :class="['border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150', 
+              <tr v-for="(payment, index) in paymentHistory" :key="payment.invoiceNumber"
+                  :class="['border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150',
                            index === paymentHistory.length - 1 ? 'border-b-0' : '']">
                 <!-- Period Column -->
                 <td class="px-8 py-6">
@@ -735,7 +737,7 @@ const formatDate = (dateString: string): string => {
                 <td class="px-6 py-6">
                   <div>
                     <!-- Paid Status -->
-                    <span 
+                    <span
                       v-if="payment.status === 'paid'"
                       class="inline-flex items-center space-x-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200"
                     >
@@ -744,9 +746,9 @@ const formatDate = (dateString: string): string => {
                       </svg>
                       <span>Paid</span>
                     </span>
-                    
+
                     <!-- Due Status -->
-                    <span 
+                    <span
                       v-else-if="payment.status === 'due'"
                       class="inline-flex items-center space-x-2 px-3 py-1.5 bg-orange-50 text-orange-700 rounded-full text-sm font-medium border border-orange-200"
                     >
@@ -755,9 +757,9 @@ const formatDate = (dateString: string): string => {
                       </svg>
                       <span>Due</span>
                     </span>
-                    
+
                     <!-- Pending Status -->
-                    <span 
+                    <span
                       v-else-if="payment.status === 'pending'"
                       class="inline-flex items-center space-x-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200"
                     >
@@ -773,7 +775,7 @@ const formatDate = (dateString: string): string => {
                 <td class="px-8 py-6 text-right">
                   <div class="flex items-center justify-end space-x-2">
                     <!-- Pay Now Button (only for due payments) -->
-                    <button 
+                    <button
                       v-if="payment.status === 'due'"
                       @click="handlePayNow(payment.amount)"
                       class="inline-flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors duration-150"
@@ -783,9 +785,9 @@ const formatDate = (dateString: string): string => {
                       </svg>
                       <span>Pay Now</span>
                     </button>
-                    
+
                     <!-- View Invoice Button -->
-                    <button 
+                    <button
                       @click="handleViewInvoice(payment.invoiceNumber)"
                       class="p-2.5 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50 hover:text-gray-700 transition-colors duration-150"
                       title="View Invoice"
@@ -795,9 +797,9 @@ const formatDate = (dateString: string): string => {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                       </svg>
                     </button>
-                    
+
                     <!-- Download Invoice Button -->
-                    <button 
+                    <button
                       @click="handleDownloadInvoice(payment.invoiceNumber)"
                       class="p-2.5 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50 hover:text-gray-700 transition-colors duration-150"
                       title="Download PDF"
@@ -816,8 +818,8 @@ const formatDate = (dateString: string): string => {
     </div>
 
     <!-- Fee Reduction Application Modal -->
-    <div 
-      v-if="showFeeReductionModal" 
+    <div
+      v-if="showFeeReductionModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       @click.self="handleCancelApplication"
     >
@@ -825,7 +827,7 @@ const formatDate = (dateString: string): string => {
         <!-- Modal Header -->
         <div class="flex items-center justify-between p-6 border-b border-gray-200">
           <h3 class="text-lg font-semibold text-gray-900">Apply for Fee Reduction</h3>
-          <button 
+          <button
             @click="handleCancelApplication"
             class="text-gray-400 hover:text-gray-600 transition-colors"
           >
@@ -845,7 +847,7 @@ const formatDate = (dateString: string): string => {
             <label class="block text-sm font-medium text-gray-700 mb-2">
               Total Household Income (NOK)
             </label>
-            <input 
+            <input
               :value="householdIncome"
               type="number"
               placeholder="e.g., 450000"
@@ -870,13 +872,13 @@ const formatDate = (dateString: string): string => {
 
         <!-- Modal Actions -->
         <div class="flex items-center justify-between p-6 border-t border-gray-200 space-x-3">
-          <button 
+          <button
             @click="handleCancelApplication"
             class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
-          <button 
+          <button
             @click="handleSubmitApplication"
             class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
@@ -967,4 +969,4 @@ const formatDate = (dateString: string): string => {
     transform: rotate(360deg);
   }
 }
-</style> 
+</style>

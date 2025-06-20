@@ -11,52 +11,52 @@ const loginStep = ref<'email' | 'staff-auth' | 'id-porten' | 'entra-id'>('email'
 const domainType = ref<'guardian' | 'public-staff' | 'private-staff' | 'admin' | 'caseworker' | 'educator' | 'district-admin' | 'partner' | 'unknown'>('guardian')
 
 const demoCredentials = [
-  { 
-    label: 'Guardian (ID-Porten)', 
-    email: '', 
-    emailDisplay: 'No email required', 
+  {
+    label: 'Guardian (ID-Porten)',
+    email: '',
+    emailDisplay: 'No email required',
     type: 'guardian',
     authMethod: 'id-porten'
   },
-  { 
-    label: 'Case Worker (Entra ID)', 
-    email: 'caseworker@oslo.kommune.no', 
-    emailDisplay: 'caseworker@oslo.kommune.no', 
+  {
+    label: 'Case Worker (Entra ID)',
+    email: 'caseworker@oslo.kommune.no',
+    emailDisplay: 'caseworker@oslo.kommune.no',
     type: 'caseworker',
     authMethod: 'entra-id'
   },
-  { 
-    label: 'Educator (Entra ID)', 
-    email: 'educator@oslo.kommune.no', 
-    emailDisplay: 'educator@oslo.kommune.no', 
+  {
+    label: 'Educator (Entra ID)',
+    email: 'educator@oslo.kommune.no',
+    emailDisplay: 'educator@oslo.kommune.no',
     type: 'educator',
     authMethod: 'entra-id'
   },
-  { 
-    label: 'Public Kindergarten Staff (Entra ID)', 
-    email: 'staff@oslo.kommune.no', 
-    emailDisplay: 'staff@oslo.kommune.no', 
+  {
+    label: 'Public Kindergarten Staff (Entra ID)',
+    email: 'staff@oslo.kommune.no',
+    emailDisplay: 'staff@oslo.kommune.no',
     type: 'public-staff',
     authMethod: 'entra-id'
   },
-  { 
-    label: 'Private Kindergarten Staff (Entra ID)', 
-    email: 'partner@ist.com', 
-    emailDisplay: 'partner@ist.com', 
+  {
+    label: 'Private Kindergarten Staff (Entra ID)',
+    email: 'partner@ist.com',
+    emailDisplay: 'partner@ist.com',
     type: 'private-staff',
     authMethod: 'entra-id'
   },
-  { 
-    label: 'Admin (Entra ID)', 
-    email: 'admin@admin.oslo.kommune.no', 
-    emailDisplay: 'admin@admin.oslo.kommune.no', 
+  {
+    label: 'Admin (Entra ID)',
+    email: 'admin@admin.oslo.kommune.no',
+    emailDisplay: 'admin@admin.oslo.kommune.no',
     type: 'admin',
     authMethod: 'entra-id'
   },
-  { 
-    label: 'District Admin (Entra ID)', 
-    email: 'district@oslo.kommune.no', 
-    emailDisplay: 'district@oslo.kommune.no', 
+  {
+    label: 'District Admin (Entra ID)',
+    email: 'district@oslo.kommune.no',
+    emailDisplay: 'district@oslo.kommune.no',
     type: 'district-admin',
     authMethod: 'entra-id'
   }
@@ -144,16 +144,16 @@ async function handleEntraIDLogin() {
 
 const handleDemoLogin = async (credential: typeof demoCredentials[0]) => {
   isLoading.value = true
-  
+
   try {
     let success = false
-    
+
     if (credential.authMethod === 'id-porten') {
       success = await auth.loginWithIDPorten()
     } else {
       success = await auth.loginWithEntraID(credential.email)
     }
-    
+
     if (success) {
       // Redirect based on user role
       const user = auth.user
@@ -191,7 +191,7 @@ const handleDemoLogin = async (credential: typeof demoCredentials[0]) => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
             </svg>
           </div>
-          
+
           <!-- Title -->
           <h1 class="text-2xl font-bold text-gray-900 mb-2">IST Platform Login</h1>
           <p class="text-gray-600 text-sm">Enter your email to continue</p>
@@ -287,10 +287,10 @@ const handleDemoLogin = async (credential: typeof demoCredentials[0]) => {
         <!-- Demo Accounts Section -->
         <div class="bg-gray-50 px-6 py-6 border-t border-gray-100">
           <h3 class="text-sm font-medium text-gray-700 mb-4">Demo Accounts:</h3>
-          
+
           <div class="space-y-3">
-            <div 
-              v-for="credential in demoCredentials" 
+            <div
+              v-for="credential in demoCredentials"
               :key="credential.label"
               class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200"
             >
@@ -344,4 +344,4 @@ input:focus {
 .hover\:shadow-lg:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
-</style> 
+</style>

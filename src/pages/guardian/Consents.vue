@@ -1,17 +1,17 @@
+<!-- ConsentsPage.vue - Guardian consents management -->
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { format } from 'date-fns'
 import { nb } from 'date-fns/locale'
-import Card from 'primevue/card'
+import { Camera, Clock, Download, Edit, FileCheck, MapPin, Stethoscope } from 'lucide-vue-next'
 import Button from 'primevue/button'
-import { FileCheck, Camera, MapPin, Stethoscope, Clock, Download, Edit } from 'lucide-vue-next'
-import Badge from 'primevue/badge'
-import Checkbox from 'primevue/checkbox'
-import Dialog from 'primevue/dialog'
-import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import Card from 'primevue/card'
+import type { Component } from 'vue'
+
+defineOptions({
+  name: 'GuardianConsents'
+})
 
 const { t } = useI18n()
 
@@ -23,7 +23,7 @@ interface Consent {
   status: 'active' | 'expires_soon' | 'expired' | 'pending'
   signed: string | null
   expires: string | null
-  icon: any
+  icon: Component
 }
 
 const consents = ref<Consent[]>([
@@ -91,9 +91,6 @@ const formatDate = (date: string | null) => {
 
 <template>
   <div class="space-y-6">
-    <!-- Breadcrumb Navigation -->
-    <AppBreadcrumb />
-    
     <!-- Header -->
     <div class="flex items-center justify-between">
       <div>
@@ -134,8 +131,8 @@ const formatDate = (date: string | null) => {
       </template>
       <template #content>
         <div class="space-y-4">
-          <div 
-            v-for="consent in consents" 
+          <div
+            v-for="consent in consents"
             :key="consent.id"
             class="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50"
           >
@@ -154,15 +151,15 @@ const formatDate = (date: string | null) => {
                 </p>
               </div>
             </div>
-            
+
             <div class="flex items-center gap-3">
-              <span 
+              <span
                 class="px-2 py-1 rounded-full text-sm"
                 :class="getStatusColor(consent.status)"
               >
                 {{ getStatusText(consent.status) }}
               </span>
-              
+
               <div class="flex gap-1">
                 <template v-if="consent.status === 'pending'">
                   <Button size="small">
@@ -200,4 +197,4 @@ const formatDate = (date: string | null) => {
       </template>
     </Card>
   </div>
-</template> 
+</template>

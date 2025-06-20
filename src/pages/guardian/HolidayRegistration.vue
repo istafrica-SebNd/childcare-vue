@@ -1,31 +1,26 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { format, addDays, isAfter } from 'date-fns'
 import { nb } from 'date-fns/locale'
-import { useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
-import Badge from 'primevue/badge'
-import Calendar from 'primevue/calendar'
-import Checkbox from 'primevue/checkbox'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
-import Dialog from 'primevue/dialog'
-import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
-import { 
+import {
   Calendar as LucideCalendar,
   Check,
   AlertTriangle,
-  CalendarRange,
   Plus,
   Save,
-  CheckCircle,
   Edit,
   Trash2,
   Flag
 } from 'lucide-vue-next'
+
+defineOptions({
+  name: 'HolidayRegistration'
+})
 
 const { t } = useI18n()
 
@@ -67,13 +62,13 @@ const holidayTypes = [
 const handleSubmit = async (e: Event) => {
   e.preventDefault()
   isSubmitting.value = true
-  
+
   // Simulate API call
   await new Promise(resolve => setTimeout(resolve, 1500))
-  
+
   // Show toast notification (implement your toast system)
   console.log('Holiday registration submitted')
-  
+
   isSubmitting.value = false
   showForm.value = false
 }
@@ -99,9 +94,6 @@ const isDateTooClose = (dateStr: string) => {
 
 <template>
   <div class="space-y-6">
-    <!-- Breadcrumb Navigation -->
-    <AppBreadcrumb />
-    
     <!-- Header -->
     <div class="flex items-center justify-between">
       <div>
@@ -137,7 +129,7 @@ const isDateTooClose = (dateStr: string) => {
               <p class="text-sm text-yellow-700">{{ t('guardian.holidayRegistration.deadlines.summerDate') }}</p>
             </div>
           </div>
-          
+
           <div class="flex items-center gap-3 p-3 bg-white rounded-lg border border-yellow-200">
             <LucideCalendar class="w-5 h-5 text-yellow-600" />
             <div>
@@ -145,7 +137,7 @@ const isDateTooClose = (dateStr: string) => {
               <p class="text-sm text-yellow-700">{{ t('guardian.holidayRegistration.deadlines.christmasDate') }}</p>
             </div>
           </div>
-          
+
           <p class="text-sm text-yellow-700 pt-2">
             <span class="font-semibold">{{ t('guardian.holidayRegistration.note') }}:</span> {{ t('guardian.holidayRegistration.minimumNotice') }}
           </p>
@@ -173,7 +165,7 @@ const isDateTooClose = (dateStr: string) => {
               </div>
             </div>
           </div>
-          
+
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label for="start-date" class="block text-sm font-medium text-gray-700">{{ t('guardian.holidayRegistration.firstAbsenceDay') }}</label>
@@ -188,7 +180,7 @@ const isDateTooClose = (dateStr: string) => {
                 {{ t('guardian.holidayRegistration.minimumDays') }}
               </p>
             </div>
-            
+
             <div>
               <label for="end-date" class="block text-sm font-medium text-gray-700">{{ t('guardian.holidayRegistration.lastAbsenceDay') }}</label>
               <InputText
@@ -200,7 +192,7 @@ const isDateTooClose = (dateStr: string) => {
               />
             </div>
           </div>
-          
+
           <div>
             <label for="description" class="block text-sm font-medium text-gray-700">{{ t('guardian.holidayRegistration.descriptionOptional') }}</label>
             <Textarea
@@ -210,7 +202,7 @@ const isDateTooClose = (dateStr: string) => {
               class="w-full"
             />
           </div>
-          
+
           <div>
             <label for="contact" class="block text-sm font-medium text-gray-700">{{ t('guardian.holidayRegistration.contactOptional') }}</label>
             <InputText
@@ -219,7 +211,7 @@ const isDateTooClose = (dateStr: string) => {
               class="w-full"
             />
           </div>
-          
+
           <div class="flex gap-3">
             <Button type="submit" :disabled="isSubmitting">
               <template v-if="isSubmitting">
@@ -256,38 +248,38 @@ const isDateTooClose = (dateStr: string) => {
               <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
                 <LucideCalendar class="w-6 h-6 text-slate-600" />
               </div>
-              
+
               <div>
                 <h3 class="font-semibold">
-                  {{ format(new Date(holiday.startDate), 'd. MMM', { locale: nb }) }} - 
+                  {{ format(new Date(holiday.startDate), 'd. MMM', { locale: nb }) }} -
                   {{ format(new Date(holiday.endDate), 'd. MMM yyyy', { locale: nb }) }}
                 </h3>
                 <p class="text-sm text-slate-600">
                   {{ holiday.description }}
                 </p>
                 <p class="text-xs text-slate-500 mt-1">
-                  {{ t('guardian.holidayRegistration.registered') }}: 
+                  {{ t('guardian.holidayRegistration.registered') }}:
                   {{ format(new Date(holiday.submittedDate), 'd. MMM yyyy', { locale: nb }) }}
                 </p>
               </div>
             </div>
-            
+
             <div class="flex items-center gap-3">
-              <span 
+              <span
                 class="px-2 py-1 rounded-full text-sm border"
                 :class="getStatusColor(holiday.status)"
               >
                 {{ getStatusText(holiday.status) }}
               </span>
-              
-              <span 
+
+              <span
                 v-if="isDateTooClose(holiday.startDate) && holiday.status === 'pending'"
                 class="px-2 py-1 rounded-full text-sm border bg-red-50 text-red-700 border-red-200 flex items-center"
               >
                 <AlertTriangle class="w-3 h-3 mr-1" />
                 {{ t('guardian.holidayRegistration.lessThan14Days') }}
               </span>
-              
+
               <div class="flex gap-1">
                 <Button text>
                   <Edit class="w-4 h-4" />
@@ -320,7 +312,7 @@ const isDateTooClose = (dateStr: string) => {
             </div>
             <span class="px-2 py-1 rounded-full text-sm border">{{ t('guardian.holidayRegistration.kindergartenClosed') }}</span>
           </div>
-          
+
           <div class="p-3 border rounded-lg flex justify-between items-center hover:bg-slate-50">
             <div>
               <p class="font-medium">{{ t('guardian.holidayRegistration.closedDays.summer') }}</p>
@@ -328,7 +320,7 @@ const isDateTooClose = (dateStr: string) => {
             </div>
             <span class="px-2 py-1 rounded-full text-sm border">{{ t('guardian.holidayRegistration.kindergartenClosed') }}</span>
           </div>
-          
+
           <div class="p-3 border rounded-lg flex justify-between items-center hover:bg-slate-50">
             <div>
               <p class="font-medium">{{ t('guardian.holidayRegistration.closedDays.planning') }}</p>
@@ -336,7 +328,7 @@ const isDateTooClose = (dateStr: string) => {
             </div>
             <span class="px-2 py-1 rounded-full text-sm border">{{ t('guardian.holidayRegistration.kindergartenClosed') }}</span>
           </div>
-          
+
           <div class="p-3 border rounded-lg flex justify-between items-center hover:bg-slate-50">
             <div>
               <p class="font-medium">{{ t('guardian.holidayRegistration.closedDays.christmas') }}</p>

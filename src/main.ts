@@ -18,7 +18,7 @@ import "primeicons/primeicons.css";
 
 import App from './App.vue'
 import router from './router'
-import { i18n } from './i18n'
+import { i18n } from './locales'
 
 // Load saved language preference
 const savedLanguage = localStorage.getItem('language')
@@ -32,7 +32,7 @@ app.use(createPinia())
 app.use(router)
 
 // Configure PrimeVue with the Aura theme and ripple
-app.use(PrimeVue, { 
+app.use(PrimeVue, {
     ripple: true
 })
 app.use(ToastService)

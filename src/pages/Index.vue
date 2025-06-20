@@ -3,27 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
-import Card from 'primevue/card'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import Dropdown from 'primevue/dropdown'
-import Tag from 'primevue/tag'
-import { 
-  Building, 
-  Users, 
-  FileText,
-  ArrowRight,
-  CheckCircle,
-  Shield,
-  Globe,
-  Clock,
-  BookOpen,
-  GraduationCap,
-  Search,
-  Star,
-  MapPin,
-  Filter
-} from 'lucide-vue-next'
+
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -264,7 +244,7 @@ const handleApply = (kindergarten: any) => {
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
-              <button 
+              <button
                 @click="handleStartApplication"
                 class="flex items-center justify-center space-x-2 px-8 py-4 bg-yellow-400 text-purple-900 rounded-lg hover:bg-yellow-300 transition-colors font-semibold"
               >
@@ -273,7 +253,7 @@ const handleApply = (kindergarten: any) => {
                 </svg>
                 <span>Start Your Application</span>
               </button>
-              <button 
+              <button
                 @click="handleExploreKindergartens"
                 class="flex items-center justify-center space-x-2 px-8 py-4 border-2 border-white text-white rounded-lg hover:bg-white/10 transition-colors font-semibold"
               >
@@ -297,7 +277,7 @@ const handleApply = (kindergarten: any) => {
                   <div class="absolute bottom-12 left-16 w-8 h-8 bg-white/40 rounded-full"></div>
                   <div class="absolute bottom-8 right-8 w-20 h-20 bg-white/25 rounded-full"></div>
                 </div>
-                
+
                 <!-- Center Content -->
                 <div class="text-center z-10">
                   <svg class="w-24 h-24 text-white/80 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -317,7 +297,7 @@ const handleApply = (kindergarten: any) => {
                   <span class="text-sm font-medium text-gray-800">Safe Environment</span>
                 </div>
               </div>
-              
+
               <div class="absolute bottom-4 left-4 bg-white rounded-lg p-3 shadow-lg">
                 <div class="flex items-center space-x-2">
                   <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
@@ -343,8 +323,8 @@ const handleApply = (kindergarten: any) => {
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div 
-            v-for="feature in platformFeatures" 
+          <div
+            v-for="feature in platformFeatures"
             :key="feature.title"
             class="text-center group"
           >
@@ -373,16 +353,16 @@ const handleApply = (kindergarten: any) => {
           <div class="grid md:grid-cols-4 gap-4 items-end">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Search by name, district, or program</label>
-              <input 
+              <input
                 v-model="searchQuery"
-                type="text" 
-                placeholder="Search kindergartens..." 
+                type="text"
+                placeholder="Search kindergartens..."
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Age Group</label>
-              <select 
+              <select
                 v-model="selectedAgeGroup"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
@@ -391,7 +371,7 @@ const handleApply = (kindergarten: any) => {
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">District</label>
-              <select 
+              <select
                 v-model="selectedDistrict"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
@@ -399,7 +379,7 @@ const handleApply = (kindergarten: any) => {
               </select>
             </div>
             <div>
-              <button 
+              <button
                 @click="handleSearch"
                 class="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
               >
@@ -436,8 +416,8 @@ const handleApply = (kindergarten: any) => {
 
         <!-- Kindergarten Cards Grid -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div 
-            v-for="kindergarten in kindergartens" 
+          <div
+            v-for="kindergarten in kindergartens"
             :key="kindergarten.id"
             class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300"
           >
@@ -495,8 +475,8 @@ const handleApply = (kindergarten: any) => {
 
               <!-- Features -->
               <div class="flex flex-wrap gap-2 mb-4">
-                <span 
-                  v-for="feature in kindergarten.features" 
+                <span
+                  v-for="feature in kindergarten.features"
                   :key="feature"
                   class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium"
                 >
@@ -506,13 +486,13 @@ const handleApply = (kindergarten: any) => {
 
               <!-- Actions -->
               <div class="flex space-x-2">
-                <button 
+                <button
                   @click="handleViewDetails(kindergarten)"
                   class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                 >
                   View Details
                 </button>
-                <button 
+                <button
                   @click="handleApply(kindergarten)"
                   class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
                 >
@@ -535,8 +515,8 @@ const handleApply = (kindergarten: any) => {
           </p>
 
           <div class="grid md:grid-cols-3 gap-12">
-            <div 
-              v-for="stat in trustStats" 
+            <div
+              v-for="stat in trustStats"
               :key="stat.label"
               class="text-center"
             >
@@ -555,7 +535,7 @@ const handleApply = (kindergarten: any) => {
         <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
           Start your journey today and give your child the best educational foundation. Our team is here to help you through every step of the process.
         </p>
-        <button 
+        <button
           @click="handleStartApplication"
           class="px-8 py-4 bg-yellow-400 text-purple-900 rounded-lg hover:bg-yellow-300 transition-colors font-semibold text-lg"
         >
@@ -596,4 +576,4 @@ input:focus, select:focus, button:focus {
   ring: 2;
   ring-color: rgb(147 51 234);
 }
-</style> 
+</style>

@@ -8,7 +8,10 @@ import InputText from 'primevue/inputtext'
 import Dropdown from 'primevue/dropdown'
 import Textarea from 'primevue/textarea'
 import { User, Phone, Clock, FileText, MapPin, AlertTriangle } from 'lucide-vue-next'
-import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+
+defineOptions({
+  name: 'EmergencyContacts'
+})
 
 const { t } = useI18n()
 
@@ -114,33 +117,10 @@ const handleAddContact = () => {
     isAddDialogOpen.value = false
   }
 }
-
-const handleCall = (phone: string) => {
-  window.location.href = `tel:${phone}`
-}
-
-const handleEmail = (email: string) => {
-  window.location.href = `mailto:${email}`
-}
-
-const handleDeleteContact = (id: number) => {
-  emergencyContacts.value = emergencyContacts.value.filter(contact => contact.id !== id)
-}
-
-const getPriorityColor = (priority: number) => {
-  switch (priority) {
-    case 1: return 'bg-red-50 text-red-700 border-red-200'
-    case 2: return 'bg-orange-50 text-orange-700 border-orange-200'
-    default: return 'bg-slate-50 text-slate-700 border-slate-200'
-  }
-}
 </script>
 
 <template>
   <div class="space-y-6">
-    <!-- Breadcrumb Navigation -->
-    <AppBreadcrumb />
-    
     <!-- Header -->
     <div class="flex items-center justify-between">
       <div>
@@ -172,8 +152,8 @@ const getPriorityColor = (priority: number) => {
 
     <!-- Emergency Contacts List -->
     <div class="space-y-4">
-      <Card 
-        v-for="contact in emergencyContacts" 
+      <Card
+        v-for="contact in emergencyContacts"
         :key="contact.id"
         class="hover:shadow-md transition-shadow"
       >
@@ -184,52 +164,52 @@ const getPriorityColor = (priority: number) => {
                 <div class="w-12 h-12 bg-oslo-blue/10 rounded-full flex items-center justify-center">
                   <User class="w-6 h-6 text-oslo-blue" />
                 </div>
-                
+
                 <div class="flex-1">
                   <div class="flex items-center gap-3 mb-2">
                     <h3 class="text-lg font-semibold text-slate-900">{{ contact.name }}</h3>
-                    <span 
+                    <span
                       class="px-2 py-1 rounded-full text-xs font-medium"
                       :class="contact.isPrimary ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700'"
                     >
                       {{ contact.isPrimary ? t('guardian.emergencyContacts.primary') : t('guardian.emergencyContacts.secondary') }}
                     </span>
                   </div>
-                  
+
                   <p class="text-slate-600 mb-3">{{ contact.relationship }}</p>
-                  
+
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div class="flex items-center gap-2">
                       <Phone class="w-4 h-4 text-slate-400" />
-                      <a 
-                        :href="`tel:${contact.phone}`" 
+                      <a
+                        :href="`tel:${contact.phone}`"
                         class="text-oslo-blue hover:text-oslo-blue/80 hover:underline transition-colors"
                       >
                         {{ contact.phone }}
                       </a>
                     </div>
-                    
+
                     <div class="flex items-center gap-2">
                       <MapPin class="w-4 h-4 text-slate-400" />
-                      <a 
-                        :href="`mailto:${contact.email}`" 
+                      <a
+                        :href="`mailto:${contact.email}`"
                         class="text-oslo-blue hover:text-oslo-blue/80 hover:underline transition-colors"
                       >
                         {{ contact.email }}
                       </a>
                     </div>
-                    
+
                     <div class="flex items-center gap-2">
                       <Clock class="w-4 h-4 text-slate-400" />
                       <span class="text-slate-600">{{ contact.availability }}</span>
                     </div>
-                    
+
                     <div class="flex items-center gap-2">
                       <FileText class="w-4 h-4 text-slate-400" />
                       <span class="text-slate-600">{{ t('guardian.emergencyContacts.verified') }}</span>
                     </div>
                   </div>
-                  
+
                   <div v-if="contact.notes" class="mt-3 p-3 bg-slate-50 rounded-lg">
                     <p class="text-sm text-slate-600">
                       <strong>{{ t('guardian.emergencyContacts.notes') }}:</strong> {{ contact.notes }}
@@ -237,7 +217,7 @@ const getPriorityColor = (priority: number) => {
                   </div>
                 </div>
               </div>
-              
+
               <div class="flex items-center gap-2 ml-4">
                 <Button text severity="secondary" size="small">
                   <FileText class="w-4 h-4" />
@@ -253,7 +233,7 @@ const getPriorityColor = (priority: number) => {
     </div>
 
     <!-- Add New Contact Card -->
-    <Card 
+    <Card
       class="border-dashed border-2 border-slate-300 hover:border-oslo-blue transition-colors cursor-pointer"
       @click="isAddDialogOpen = true"
     >
@@ -289,9 +269,9 @@ const getPriorityColor = (priority: number) => {
     </Card>
 
     <!-- Add Emergency Contact Dialog -->
-    <Dialog 
-      v-model:visible="isAddDialogOpen" 
-      modal 
+    <Dialog
+      v-model:visible="isAddDialogOpen"
+      modal
       :header="t('guardian.emergencyContacts.addNew')"
       class="w-full max-w-2xl"
     >
@@ -301,74 +281,74 @@ const getPriorityColor = (priority: number) => {
             <label class="block text-sm font-medium text-slate-700 mb-2">
               {{ t('guardian.emergencyContacts.fullName') }}
             </label>
-            <InputText 
-              v-model="newContact.name" 
+            <InputText
+              v-model="newContact.name"
               :placeholder="t('guardian.emergencyContacts.fullNamePlaceholder')"
               class="w-full"
               required
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">
               {{ t('guardian.emergencyContacts.relationship') }}
             </label>
-            <Dropdown 
-              v-model="newContact.relationship" 
+            <Dropdown
+              v-model="newContact.relationship"
               :options="relationshipOptions"
               :placeholder="t('guardian.emergencyContacts.selectRelationship')"
               class="w-full"
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">
               {{ t('guardian.emergencyContacts.phone') }}
             </label>
-            <InputText 
-              v-model="newContact.phone" 
+            <InputText
+              v-model="newContact.phone"
               :placeholder="t('guardian.emergencyContacts.phonePlaceholder')"
               class="w-full"
               required
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">
               {{ t('guardian.emergencyContacts.email') }}
             </label>
-            <InputText 
-              v-model="newContact.email" 
+            <InputText
+              v-model="newContact.email"
               :placeholder="t('guardian.emergencyContacts.emailPlaceholder')"
               class="w-full"
               type="email"
             />
           </div>
-          
+
           <div class="md:col-span-2">
             <label class="block text-sm font-medium text-slate-700 mb-2">
               {{ t('guardian.emergencyContacts.availability') }}
             </label>
-            <InputText 
-              v-model="newContact.availability" 
+            <InputText
+              v-model="newContact.availability"
               :placeholder="t('guardian.emergencyContacts.availabilityPlaceholder')"
               class="w-full"
             />
           </div>
-          
+
           <div class="md:col-span-2">
             <label class="block text-sm font-medium text-slate-700 mb-2">
               {{ t('guardian.emergencyContacts.notes') }}
             </label>
-            <Textarea 
-              v-model="newContact.notes" 
+            <Textarea
+              v-model="newContact.notes"
               :placeholder="t('guardian.emergencyContacts.notesPlaceholder')"
               class="w-full"
               rows="3"
             />
           </div>
         </div>
-        
+
         <div class="flex justify-end gap-3 pt-4 border-t">
           <Button outlined class="border-oslo-blue text-oslo-blue hover:bg-oslo-blue/5" @click="isAddDialogOpen = false">
             {{ t('guardian.emergencyContacts.cancel') }}
@@ -380,4 +360,4 @@ const getPriorityColor = (priority: number) => {
       </form>
     </Dialog>
   </div>
-</template> 
+</template>

@@ -3,16 +3,16 @@ import type { RouteRecordRaw } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 // Layouts
-import Layout from '@/components/layout/Layout.vue'
+import BaseLayout from '@/layouts/core/BaseLayout.vue'
 
 // Pages (lazy loaded for performance)
 const Index = () => import('@/pages/Index.vue')
 const LoginPage = () => import('@/pages/auth/LoginPage.vue')
-const NotFound = () => import('@/pages/NotFound.vue')
+const NotFound = () => import('@/pages/shared/NotFound.vue')
 
 // Guardian
 const GuardianDashboard = () => import('@/pages/guardian/GuardianDashboard.vue')
-const GuardianMessages = () => import('@/pages/guardian/Messages.vue')
+const GuardianMessages = () => import('@/components/communication/Messages.vue')
 const GuardianDailySchedule = () => import('@/pages/guardian/DailySchedule.vue')
 const GuardianAttendanceTracking = () => import('@/pages/guardian/AttendanceTracking.vue')
 const GuardianNoticeBoard = () => import('@/pages/guardian/NoticeBoard.vue')
@@ -35,16 +35,19 @@ const GuardianPickupAuthorization = () => import('@/pages/guardian/PickupAuthori
 const GuardianChildLocation = () => import('@/pages/guardian/ChildLocation.vue')
 
 // Caseworker
-// const CaseWorkerDashboard = () => import('@/pages/caseworker/CaseWorkerDashboard.vue')
-// const ReviewQueue = () => import('@/pages/caseworker/ReviewQueue.vue')
-// const PlacementManagement = () => import('@/pages/caseworker/PlacementManagement.vue')
-// const CaseWorkerMessages = () => import('@/pages/caseworker/Messages.vue')
+const CaseWorkerDashboard = () => import('@/pages/caseworker/CaseWorkerDashboard.vue')
+const ReviewQueue = () => import('@/pages/caseworker/ReviewQueue.vue')
+const PlacementManagement = () => import('@/pages/caseworker/PlacementManagement.vue')
+const CaseWorkerMessages = () => import('@/pages/caseworker/Messages.vue')
 // const ManualApplication = () => import('@/pages/caseworker/ManualApplication.vue')
 // const ApplicationsInProgress = () => import('@/pages/caseworker/ApplicationsInProgress.vue')
 // const ApplicationsSubmitted = () => import('@/pages/caseworker/ApplicationsSubmitted.vue')
 // const ApplicationsFollowUp = () => import('@/pages/caseworker/ApplicationsFollowUp.vue')
 // const ApplicationView = () => import('@/pages/caseworker/ApplicationView.vue')
 // const DualPlacementSetup = () => import('@/pages/caseworker/DualPlacementSetup.vue')
+
+// Educator
+const EducatorDashboard = () => import('@/pages/educator/EducatorDashboard.vue')
 
 // Admin
 // const MunicipalityAdminDashboard = () => import('@/pages/admin/MunicipalityAdminDashboard.vue')
@@ -70,7 +73,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/login', name: 'Login', component: LoginPage },
   {
     path: '/guardian',
-    component: Layout,
+    component: BaseLayout,
     meta: { requiresAuth: true },
     children: [
       { path: '', name: 'GuardianDashboard', component: GuardianDashboard },
@@ -94,8 +97,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'new-application', component: GuardianNewApplication },
       { path: 'living-arrangements', component: GuardianLivingArrangements },
       { path: 'dual-placement/:id', component: GuardianDualPlacementManagement },
-      { path: 'emergency-contacts', component: GuardianEmergencyContacts },
-      { path: 'holiday-registration', component: GuardianHolidayRegistration },
+      // { path: 'emergency-contacts', component: GuardianEmergencyContacts },
+      // { path: 'holiday-registration', component: GuardianHolidayRegistration },
       { path: 'consents', component: GuardianConsents },
       { path: 'absence-reporting', component: GuardianAbsenceReporting },
       { path: 'teacher-meetings', component: GuardianTeacherMeetings },
@@ -103,23 +106,25 @@ const routes: RouteRecordRaw[] = [
       { path: 'child-location', component: GuardianChildLocation },
     ],
   },
-  // {
-  //   path: '/caseworker',
-  //   component: Layout,
-  //   meta: { requiresAuth: true },
-  //   children: [
-  //     { path: '', name: 'CaseWorkerDashboard', component: CaseWorkerDashboard },
-  //     { path: 'review-queue', component: ReviewQueue },
-  //     { path: 'placement-management', component: PlacementManagement },
-  //     { path: 'messages', component: CaseWorkerMessages },
-  //     { path: 'manual-application', component: ManualApplication },
-  //     { path: 'application/:id', component: ApplicationView },
-  //     { path: 'dual-placement-setup/:id', component: DualPlacementSetup },
-  //     { path: 'applications/in-progress', component: ApplicationsInProgress },
-  //     { path: 'applications/submitted', component: ApplicationsSubmitted },
-  //     { path: 'applications/follow-up', component: ApplicationsFollowUp },
-  //   ],
-  // },
+  {
+    path: '/caseworker',
+    component: BaseLayout,
+    meta: { requiresAuth: true },
+    children: [
+      { path: '', name: 'CaseWorkerDashboard', component: CaseWorkerDashboard },
+      { path: 'review-queue', component: ReviewQueue },
+      { path: 'placement-management', component: PlacementManagement },
+      { path: 'messages', component: CaseWorkerMessages },
+    ],
+  },
+  {
+    path: '/educator',
+    component: BaseLayout,
+    meta: { requiresAuth: true },
+    children: [
+      { path: '', name: 'EducatorDashboard', component: EducatorDashboard },
+    ],
+  },
   // {
   //   path: '/admin',
   //   component: Layout,
@@ -154,7 +159,7 @@ const router = createRouter({
 // Global navigation guard for auth
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore()
-  
+
   // If route requires auth
   if (to.meta.requiresAuth) {
     // Check if user is authenticated
@@ -162,14 +167,14 @@ router.beforeEach((to, from, next) => {
       next({ name: 'Login' })
       return
     }
-    
+
     // Check if user has required role
     if (to.meta.role && auth.user.role !== to.meta.role) {
       next({ name: 'Home' })
       return
     }
   }
-  
+
   next()
 })
 

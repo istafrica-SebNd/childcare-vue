@@ -8,7 +8,6 @@ import Button from 'primevue/button'
 import Badge from 'primevue/badge'
 import InputText from 'primevue/inputtext'
 import Skeleton from 'primevue/skeleton'
-import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import { FolderOpen, FileText, Download, Search, Filter, Eye, Calendar, AlertCircle } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -110,14 +109,14 @@ const filteredDocuments = computed(() => {
   let filtered = documents.value
 
   if (selectedCategory.value !== 'all') {
-    filtered = filtered.filter(doc => 
+    filtered = filtered.filter(doc =>
       doc.category.toLowerCase() === selectedCategory.value.toLowerCase()
     )
   }
 
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(doc => 
+    filtered = filtered.filter(doc =>
       doc.title.toLowerCase().includes(query) ||
       doc.description.toLowerCase().includes(query) ||
       doc.category.toLowerCase().includes(query)
@@ -138,7 +137,7 @@ const handleDocumentView = async (doc: Document) => {
 
     // Simulate loading delay
     await new Promise(resolve => setTimeout(resolve, 1000))
-    
+
     // Open document in new tab - in real app this would be a proper document viewer
     window.open(doc.url, '_blank', 'width=800,height=600')
   } catch (err) {
@@ -207,10 +206,10 @@ const handleSearch = () => {
 
 const selectCategory = (categoryId: string) => {
   selectedCategory.value = categoryId
-  
+
   const category = categories.value.find(cat => cat.id === categoryId)
   const categoryName = category?.name || 'All Documents'
-  
+
   toast.add({
     severity: 'info',
     summary: 'Category Selected',
@@ -254,18 +253,18 @@ onMounted(async () => {
   try {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1500))
-    
+
     // Update category counts
     categories.value.forEach(category => {
       if (category.id === 'all') {
         category.count = documents.value.length
       } else {
-        category.count = documents.value.filter(doc => 
+        category.count = documents.value.filter(doc =>
           doc.category.toLowerCase() === category.id.toLowerCase()
         ).length
       }
     })
-    
+
     isLoading.value = false
   } catch (err) {
     error.value = 'Failed to load documents'
@@ -282,19 +281,10 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-6">
-    <!-- Breadcrumb Navigation -->
-    <AppBreadcrumb />
-    
     <!-- Header -->
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-slate-900">{{ t('guardian.documents.title') }}</h1>
-        <p class="text-slate-600 mt-2">{{ t('guardian.documents.description') }}</p>
-      </div>
-      <span class="px-3 py-1 rounded-full bg-oslo-blue/10 text-oslo-blue border border-oslo-blue/20 flex items-center">
-        <FolderOpen class="w-4 h-4 mr-2" />
-        {{ t('guardian.documents.badge') }}
-      </span>
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t('documents.title', 'Documents') }}</h1>
+      <p class="text-gray-600">{{ t('documents.description', 'Manage your child\'s documents and files') }}</p>
     </div>
 
     <!-- Error State -->
@@ -328,8 +318,8 @@ onMounted(async () => {
                 />
               </div>
             </div>
-            <Button 
-              outlined 
+            <Button
+              outlined
               :disabled="isLoading"
               @click="toggleFilterPanel"
               :aria-label="t('guardian.documents.filter')"
@@ -406,15 +396,15 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          
+
           <div v-else-if="filteredDocuments.length === 0" class="text-center py-8 text-slate-500">
             <FileText class="w-12 h-12 mx-auto mb-4 text-slate-300" />
             <p>No documents found matching your criteria.</p>
           </div>
-          
+
           <div v-else class="space-y-4">
-            <div 
-              v-for="document in filteredDocuments" 
+            <div
+              v-for="document in filteredDocuments"
               :key="document.id"
               class="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 transition-colors"
               role="article"
@@ -424,19 +414,19 @@ onMounted(async () => {
                 <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
                   <FileText class="w-6 h-6 text-slate-600" />
                 </div>
-                
+
                 <div>
                   <h3 class="font-semibold">{{ document.title }}</h3>
                   <p class="text-sm text-slate-600">{{ document.description }}</p>
-                  
+
                   <div class="flex items-center gap-4 mt-2">
-                    <span 
+                    <span
                       class="px-2 py-1 rounded-full text-sm"
                       :class="getCategoryBadgeClass(document.category)"
                     >
                       {{ document.category }}
                     </span>
-                    
+
                     <div class="flex items-center gap-3 text-xs text-slate-500">
                       <span>{{ document.size }}</span>
                       <div class="flex items-center gap-1">
@@ -447,21 +437,21 @@ onMounted(async () => {
                   </div>
                 </div>
               </div>
-              
+
               <div class="flex items-center gap-2">
-                <Button 
-                  text 
-                  severity="secondary" 
-                  size="small" 
+                <Button
+                  text
+                  severity="secondary"
+                  size="small"
                   @click="handleDocumentView(document)"
                   :aria-label="`View ${document.title}`"
                 >
                   <Eye class="w-4 h-4" />
                 </Button>
-                <Button 
-                  text 
-                  severity="secondary" 
-                  size="small" 
+                <Button
+                  text
+                  severity="secondary"
+                  size="small"
                   @click="handleDocumentDownload(document)"
                   :aria-label="`Download ${document.title}`"
                 >
@@ -493,9 +483,9 @@ onMounted(async () => {
               <Skeleton width="6rem" height="2rem" />
             </div>
           </div>
-          
+
           <div v-else class="space-y-3">
-            <div 
+            <div
               v-for="update in recentUpdates"
               :key="update.title"
               class="flex items-center justify-between p-3 bg-slate-50 rounded-lg"
@@ -506,9 +496,9 @@ onMounted(async () => {
                   {{ t('guardian.documents.published') }} {{ update.publishedDate }}
                 </p>
               </div>
-              <Button 
-                outlined 
-                size="small" 
+              <Button
+                outlined
+                size="small"
                 @click="handleQuickDownload(update.title)"
                 :aria-label="`Download ${update.title}`"
               >
@@ -521,4 +511,4 @@ onMounted(async () => {
       </template>
     </Card>
   </div>
-</template> 
+</template>

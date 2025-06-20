@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
-import Avatar from 'primevue/avatar'
 import Badge from 'primevue/badge'
-import Dropdown from 'primevue/dropdown'
-import InputText from 'primevue/inputtext'
-import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+
+defineOptions({
+  name: 'NoticeBoard'
+})
 
 const { t } = useI18n()
 
@@ -111,178 +110,111 @@ const getAuthorInitials = (name: string) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white p-6">
-    <!-- Breadcrumb Navigation -->
-    <AppBreadcrumb />
-    
-    <div class="max-w-4xl mx-auto space-y-6">
-      <!-- Header -->
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-3xl font-bold text-slate-900 mb-1">Notice Board</h1>
-          <p class="text-slate-600">Latest posts and announcements from the kindergarten</p>
-        </div>
-        <Badge class="bg-blue-50 text-blue-700 border-blue-200 px-3 py-1.5 font-medium">
-          <i class="pi pi-calendar mr-2 text-sm"></i>
-          Latest Updates
-        </Badge>
-      </div>
+  <div class="space-y-6">
+    <Card
+      v-for="post in posts"
+      :key="post.id"
+      class="border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+    >
+      <template #header>
+        <div class="px-6 pt-6 pb-4">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                {{ getAuthorInitials(post.author) }}
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900 text-base">{{ post.author }}</h3>
+                <p class="text-sm text-slate-500 mt-0.5">{{ formatDate(post.date) }}</p>
+              </div>
+            </div>
 
-      <!-- Filter Categories -->
-      <Card class="border border-slate-200 shadow-sm">
-        <template #content>
-          <div class="p-6">
-            <div class="flex flex-wrap gap-3">
-              <Button 
-                label="All Posts" 
-                size="small" 
-                class="bg-slate-900 hover:bg-slate-800 text-white border-0 px-4 py-2 font-medium"
-              />
-              <Button 
-                size="small" 
-                outlined
-                class="border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 font-medium"
-              >
-                <i class="pi pi-users mr-2 text-sm"></i>
-                Activities
-              </Button>
-              <Button 
-                size="small" 
-                outlined
-                class="border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 font-medium"
-              >
-                <i class="pi pi-android mr-2 text-sm"></i>
-                Menu
-              </Button>
-              <Button 
-                size="small" 
-                outlined
-                class="border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 font-medium"
-              >
-                <i class="pi pi-file mr-2 text-sm"></i>
-                Curriculum
-              </Button>
-              <Button 
-                size="small" 
-                outlined
-                class="border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 font-medium"
-              >
-                <i class="pi pi-calendar mr-2 text-sm"></i>
-                Events
-              </Button>
+            <div :class="['px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5', getCategoryColor(post.category)]">
+              <i :class="[getCategoryIcon(post.category), 'text-xs']"></i>
+              {{ post.category }}
             </div>
           </div>
-        </template>
-      </Card>
+        </div>
+      </template>
 
-      <!-- Posts Feed -->
-      <div class="space-y-6">
-        <Card 
-          v-for="post in posts" 
-          :key="post.id" 
-          class="border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200"
-        >
-          <template #header>
-            <div class="px-6 pt-6 pb-4">
-              <div class="flex items-start justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                    {{ getAuthorInitials(post.author) }}
-                  </div>
-                  <div>
-                    <h3 class="font-semibold text-slate-900 text-base">{{ post.author }}</h3>
-                    <p class="text-sm text-slate-500 mt-0.5">{{ formatDate(post.date) }}</p>
-                  </div>
-                </div>
-                
-                <div :class="['px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5', getCategoryColor(post.category)]">
-                  <i :class="[getCategoryIcon(post.category), 'text-xs']"></i>
-                  {{ post.category }}
-                </div>
-              </div>
+      <template #content>
+        <div class="px-6 pb-6 space-y-5">
+          <div>
+            <h2 class="text-xl font-bold mb-3 text-slate-900 leading-tight">{{ post.title }}</h2>
+            <p class="text-slate-700 leading-relaxed text-base">{{ post.content }}</p>
+          </div>
+
+          <!-- Images -->
+          <div v-if="post.images" class="grid grid-cols-3 gap-3">
+            <div
+              v-for="(image, index) in post.images"
+              :key="index"
+              class="aspect-square bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200"
+            >
+              <i class="pi pi-camera text-slate-400 text-2xl"></i>
             </div>
-          </template>
-          
-          <template #content>
-            <div class="px-6 pb-6 space-y-5">
-              <div>
-                <h2 class="text-xl font-bold mb-3 text-slate-900 leading-tight">{{ post.title }}</h2>
-                <p class="text-slate-700 leading-relaxed text-base">{{ post.content }}</p>
-              </div>
+          </div>
 
-              <!-- Images -->
-              <div v-if="post.images" class="grid grid-cols-3 gap-3">
-                <div 
-                  v-for="(image, index) in post.images" 
-                  :key="index" 
-                  class="aspect-square bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200"
-                >
-                  <i class="pi pi-camera text-slate-400 text-2xl"></i>
-                </div>
-              </div>
+          <!-- Attachment -->
+          <div
+            v-if="post.attachment"
+            class="flex items-center gap-3 p-4 bg-slate-50 rounded-lg border border-slate-200"
+          >
+            <i class="pi pi-file-pdf text-red-600 text-xl"></i>
+            <span class="text-sm font-medium text-slate-900 flex-1">{{ post.attachment }}</span>
+            <Button
+              label="Download"
+              size="small"
+              text
+              class="text-slate-600 hover:text-slate-900 font-medium"
+            />
+          </div>
 
-              <!-- Attachment -->
-              <div 
-                v-if="post.attachment" 
-                class="flex items-center gap-3 p-4 bg-slate-50 rounded-lg border border-slate-200"
-              >
-                <i class="pi pi-file-pdf text-red-600 text-xl"></i>
-                <span class="text-sm font-medium text-slate-900 flex-1">{{ post.attachment }}</span>
-                <Button 
-                  label="Download" 
-                  size="small" 
-                  text 
-                  class="text-slate-600 hover:text-slate-900 font-medium"
-                />
-              </div>
+          <!-- Event Date -->
+          <div
+            v-if="post.eventDate"
+            class="flex items-center gap-3 p-4 bg-purple-50 rounded-lg border border-purple-200"
+          >
+            <i class="pi pi-calendar text-purple-600 text-xl"></i>
+            <span class="font-semibold text-purple-800 text-sm">
+              {{ formatEventDate(post.eventDate) }}
+            </span>
+          </div>
 
-              <!-- Event Date -->
-              <div 
-                v-if="post.eventDate" 
-                class="flex items-center gap-3 p-4 bg-purple-50 rounded-lg border border-purple-200"
-              >
-                <i class="pi pi-calendar text-purple-600 text-xl"></i>
-                <span class="font-semibold text-purple-800 text-sm">
-                  {{ formatEventDate(post.eventDate) }}
-                </span>
-              </div>
-
-              <!-- Interaction Bar -->
-              <div class="flex items-center justify-between pt-4 border-t border-slate-200">
-                <div class="flex items-center gap-6">
-                  <button class="flex items-center gap-2 text-slate-600 hover:text-red-500 transition-colors group">
-                    <i class="pi pi-heart text-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="text-sm font-semibold">{{ post.likes }}</span>
-                  </button>
-                  <button class="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors group">
-                    <i class="pi pi-comment text-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="text-sm font-semibold">{{ post.comments }}</span>
-                  </button>
-                </div>
-                
-                <Button 
-                  size="small" 
-                  text 
-                  class="text-slate-600 hover:text-slate-900 font-medium"
-                >
-                  <i class="pi pi-share-alt mr-2"></i>
-                  Share
-                </Button>
-              </div>
+          <!-- Interaction Bar -->
+          <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+            <div class="flex items-center gap-6">
+              <button class="flex items-center gap-2 text-slate-600 hover:text-red-500 transition-colors group">
+                <i class="pi pi-heart text-lg group-hover:scale-110 transition-transform"></i>
+                <span class="text-sm font-semibold">{{ post.likes }}</span>
+              </button>
+              <button class="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors group">
+                <i class="pi pi-comment text-lg group-hover:scale-110 transition-transform"></i>
+                <span class="text-sm font-semibold">{{ post.comments }}</span>
+              </button>
             </div>
-          </template>
-        </Card>
-      </div>
 
-      <!-- Load More -->
-      <div class="flex justify-center pt-2">
-        <Button 
-          label="Load More Posts" 
-          outlined 
-          class="border-slate-300 text-slate-700 hover:bg-slate-50 px-6 py-2.5 font-medium"
-        />
-      </div>
-    </div>
+            <Button
+              size="small"
+              text
+              class="text-slate-600 hover:text-slate-900 font-medium"
+            >
+              <i class="pi pi-share-alt mr-2"></i>
+              Share
+            </Button>
+          </div>
+        </div>
+      </template>
+    </Card>
+  </div>
+
+  <!-- Load More -->
+  <div class="flex justify-center pt-2">
+    <Button
+      label="Load More Posts"
+      outlined
+      class="border-slate-300 text-slate-700 hover:bg-slate-50 px-6 py-2.5 font-medium"
+    />
   </div>
 </template>
 
@@ -378,4 +310,4 @@ h1, h2, h3 {
 .leading-tight {
   line-height: 1.25;
 }
-</style> 
+</style>
