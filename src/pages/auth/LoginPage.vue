@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { useI18n } from 'vue-i18n'
+import { useAuth } from '@/composables/auth/useAuth'
+
 
 const email = ref('')
 const error = ref('')
@@ -62,14 +62,13 @@ const demoCredentials = [
   }
 ]
 
-const auth = useAuthStore()
-const { t } = useI18n()
+const { user, loginWithIDPorten, loginWithEntraID, checkDomainType } = useAuth()
 const router = useRouter()
 
 // Redirect if already authenticated
-if (auth.user) {
+if (user.value) {
   let redirectPath = '/'
-  switch (auth.user.role) {
+  switch (user.value.role) {
     case 'guardian': redirectPath = '/guardian'; break
     case 'caseworker': redirectPath = '/caseworker'; break
     case 'admin': redirectPath = '/admin'; break
@@ -84,7 +83,7 @@ if (auth.user) {
 
 watch(email, (val) => {
   if (val) {
-    domainType.value = auth.checkDomainType(val)
+    domainType.value = checkDomainType(val)
     error.value = ''
   }
 })
@@ -94,7 +93,7 @@ function handleEmailSubmit() {
     error.value = 'Please enter your email address'
     return
   }
-  const type = auth.checkDomainType(email.value)
+  const type = checkDomainType(email.value)
   if (type === 'unknown') {
     error.value = 'Your organization is not currently supported. Please contact support.'
     return
@@ -105,11 +104,11 @@ function handleEmailSubmit() {
 async function handleIDPortenLogin() {
   isLoading.value = true
   try {
-    const success = await auth.loginWithIDPorten()
+    const success = await loginWithIDPorten()
     if (success) {
       router.push('/guardian')
     }
-  } catch (err) {
+  } catch {
     error.value = 'Failed to connect to ID-Porten. Please try again.'
   } finally {
     isLoading.value = false
@@ -119,12 +118,11 @@ async function handleIDPortenLogin() {
 async function handleEntraIDLogin() {
   isLoading.value = true
   try {
-    const success = await auth.loginWithEntraID(email.value)
+    const success = await loginWithEntraID(email.value)
     if (success) {
       // Redirect based on user role
-      const user = auth.user
-      if (user) {
-        switch (user.role) {
+      if (user.value) {
+        switch (user.value.role) {
           case 'caseworker': router.push('/caseworker'); break
           case 'admin': router.push('/admin'); break
           case 'staff': router.push('/staff'); break
@@ -149,16 +147,15 @@ const handleDemoLogin = async (credential: typeof demoCredentials[0]) => {
     let success = false
 
     if (credential.authMethod === 'id-porten') {
-      success = await auth.loginWithIDPorten()
+      success = await loginWithIDPorten()
     } else {
-      success = await auth.loginWithEntraID(credential.email)
+      success = await loginWithEntraID(credential.email)
     }
 
     if (success) {
       // Redirect based on user role
-      const user = auth.user
-      if (user) {
-        switch (user.role) {
+      if (user.value) {
+        switch (user.value.role) {
           case 'guardian': router.push('/guardian'); break
           case 'caseworker': router.push('/caseworker'); break
           case 'admin': router.push('/admin'); break

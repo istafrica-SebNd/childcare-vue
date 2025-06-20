@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { useAuth } from '@/composables/auth/useAuth'
 
 interface Props {
   showNotifications?: boolean
@@ -13,9 +12,8 @@ withDefaults(defineProps<Props>(), {
   showNotifications: true
 })
 
-const authStore = useAuthStore()
+const { userName, userRole, userDistrict, logout } = useAuth()
 const { locale } = useI18n()
-const router = useRouter()
 
 // Language selector state
 const showLanguageMenu = ref(false)
@@ -32,9 +30,7 @@ const showUserMenu = ref(false)
 const languageDropdownRef = ref<HTMLElement>()
 const userDropdownRef = ref<HTMLElement>()
 
-const userDisplayName = computed(() => authStore.user?.name || 'Anna Hansen')
-const userRole = computed(() => authStore.user?.role || 'Guardian')
-const userDistrict = computed(() => authStore.user?.district || 'Oslo District')
+const userDisplayName = computed(() => userName.value || 'Anna Hansen')
 
 // Current language display name
 const currentLanguage = computed(() => {
@@ -69,29 +65,15 @@ const selectLanguage = (language: typeof languages[0]) => {
   localStorage.setItem('preferred-language', language.code)
 }
 
-const logout = async () => {
+const handleLogout = async () => {
   try {
-    console.log('🔴 AppHeader logout clicked')
-    console.log('🔴 User before logout:', authStore.user)
-
-    // Call the auth store logout method
-    authStore.logout()
-
-    console.log('🔴 User after authStore.logout():', authStore.user)
-    console.log('🔴 isAuthenticated after logout:', authStore.isAuthenticated)
 
     // Close the user menu
     showUserMenu.value = false
 
-    // Add a small delay to ensure state has updated
-    await new Promise(resolve => setTimeout(resolve, 100))
+    // Call the logout function from the composable (includes navigation)
+    await logout()
 
-    console.log('🔴 About to redirect to /login')
-
-    // Redirect to login page
-    await router.push('/login')
-
-    console.log('🔴 Redirected to /login successfully')
   } catch (error) {
     console.error('🔴 Error during logout:', error)
   }
@@ -206,7 +188,7 @@ onUnmounted(() => {
               Help & Support
             </button>
             <hr class="dropdown-divider">
-            <button @click="logout" class="dropdown-item logout">
+            <button @click="handleLogout" class="dropdown-item logout">
               <i class="pi pi-sign-out"></i>
               {{ $t('common.logout') }}
             </button>
@@ -452,6 +434,7 @@ onUnmounted(() => {
   cursor: pointer;
   transition: background-color 0.2s ease;
   font-size: 0.875rem;
+  z-index: 10;
 }
 
 .dropdown-item:hover {
