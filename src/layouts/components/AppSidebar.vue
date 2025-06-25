@@ -27,6 +27,13 @@ const props = withDefaults(defineProps<Props>(), {
 // State for expanded menu items
 const expandedItems = ref<Set<string>>(new Set())
 
+// Admin navigation starts with sections expanded by default
+if (props.userRole === 'admin') {
+  expandedItems.value.add('administration')
+  expandedItems.value.add('access-right')
+  expandedItems.value.add('admissions')
+}
+
 // Toggle submenu expansion
 const toggleSubmenu = (itemId: string) => {
   if (expandedItems.value.has(itemId)) {
@@ -98,16 +105,20 @@ const sidebarClasses = computed(() => [
           v-for="item in sidebarItems"
           :key="item.id"
           class="nav-item"
+          :class="{ 'has-children': item.children && item.children.length > 0 }"
         >
-          <!-- Items with children (dropdown menu) -->
+          <!-- Items with children (accordion menu) -->
           <div v-if="item.children && item.children.length > 0">
             <!-- Parent item (clickable to toggle submenu) -->
             <button
               @click="toggleSubmenu(item.id)"
               class="nav-link nav-parent"
-              :class="{ 'expanded': isExpanded(item.id) }"
+              :class="{
+                'expanded': isExpanded(item.id),
+                'dashboard-active': item.id === 'dashboard' && $route.path.includes('/admin/dashboard')
+              }"
             >
-              <i :class="item.icon"></i>
+              <i :class="item.icon" class="nav-icon"></i>
               <span v-if="!sidebarCollapsed" class="nav-label">
                 {{ item.label }}
               </span>
@@ -127,29 +138,39 @@ const sidebarClasses = computed(() => [
               ></i>
             </button>
 
-            <!-- Submenu (conditionally visible) -->
-            <div
-              v-if="isExpanded(item.id) && !sidebarCollapsed"
-              class="submenu"
-            >
-              <ul class="submenu-list">
-                <li
-                  v-for="child in item.children"
-                  :key="child.id"
-                  class="submenu-item"
-                >
-                  <router-link
-                    v-if="child.route"
-                    :to="child.route"
-                    class="submenu-link"
-                    active-class="active"
+            <!-- Submenu (conditionally visible with smooth animation) -->
+            <transition name="submenu-slide">
+              <div
+                v-if="isExpanded(item.id) && !sidebarCollapsed"
+                class="submenu"
+              >
+                <ul class="submenu-list">
+                  <li
+                    v-for="child in item.children"
+                    :key="child.id"
+                    class="submenu-item"
                   >
-                    <i :class="child.icon"></i>
-                    <span>{{ child.label }}</span>
-                  </router-link>
-                </li>
-              </ul>
-            </div>
+                    <router-link
+                      v-if="child.route"
+                      :to="child.route"
+                      class="submenu-link"
+                      active-class="active"
+                    >
+                      <i :class="child.icon" class="submenu-icon"></i>
+                      <span>{{ child.label }}</span>
+                    </router-link>
+                    <!-- For items without routes (just labels) -->
+                    <div
+                      v-else
+                      class="submenu-label"
+                    >
+                      <i :class="child.icon" class="submenu-icon"></i>
+                      <span>{{ child.label }}</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </transition>
           </div>
 
           <!-- Regular navigation link (no children) -->
@@ -158,8 +179,11 @@ const sidebarClasses = computed(() => [
             :to="item.route"
             class="nav-link"
             active-class="active"
+            :class="{
+              'dashboard-active': item.id === 'dashboard' && $route.path.includes('/admin/dashboard')
+            }"
           >
-            <i :class="item.icon"></i>
+            <i :class="item.icon" class="nav-icon"></i>
             <span v-if="!sidebarCollapsed" class="nav-label">
               {{ item.label }}
             </span>
@@ -172,16 +196,22 @@ const sidebarClasses = computed(() => [
               {{ item.badge.text || item.badge.source }}
             </span>
           </router-link>
+
+          <!-- Non-clickable items (categories or separators) -->
+          <div
+            v-else
+            class="nav-link nav-category"
+          >
+            <i :class="item.icon" class="nav-icon"></i>
+            <span v-if="!sidebarCollapsed" class="nav-label">
+              {{ item.label }}
+            </span>
+          </div>
         </li>
       </ul>
     </nav>
 
-    <!-- Role-specific footer -->
-    <div class="sidebar-footer">
-      <div v-if="!sidebarCollapsed" class="user-role">
-        Role: {{ userRole }}
-      </div>
-    </div>
+
   </aside>
 </template>
 
@@ -283,21 +313,32 @@ const sidebarClasses = computed(() => [
   gap: 0.75rem;
   padding: 0.75rem 1rem;
   text-decoration: none;
-  color: inherit;
+  color: #374151;
   transition: all 0.2s ease;
   width: 100%;
   border: none;
   background: none;
   text-align: left;
   cursor: pointer;
+  border-radius: 0.375rem;
+  margin: 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .nav-link:hover {
   background: #f3f4f6;
+  color: #1f2937;
 }
 
-.nav-link.active {
-  background: #3b82f6;
+.nav-link.active,
+.nav-link.dashboard-active {
+  background: #1e40af;
+  color: white;
+}
+
+.nav-link.active .nav-icon,
+.nav-link.dashboard-active .nav-icon {
   color: white;
 }
 
@@ -336,43 +377,103 @@ const sidebarClasses = computed(() => [
   margin-right: 0.5rem;
 }
 
+/* Admin-specific nav styling */
+.role-admin .nav-item.has-children .nav-parent {
+  background: #f8fafc;
+  border-radius: 0.375rem;
+  margin: 0.25rem 0.5rem;
+}
+
+.role-admin .nav-item.has-children .nav-parent:hover {
+  background: #f1f5f9;
+}
+
+.role-admin .nav-item.has-children .nav-parent.expanded {
+  background: #e2e8f0;
+  color: #334155;
+}
+
 .submenu {
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  margin: 0 0.5rem 0.5rem 0.5rem;
+  border-radius: 0.375rem;
+  background: #f8fafc;
 }
 
 .submenu-list {
   list-style: none;
   margin: 0;
-  padding: 0;
-  background: #f9fafb;
+  padding: 0.25rem 0;
 }
 
 .submenu-item {
-  border-left: 2px solid #e5e7eb;
-  margin-left: 1rem;
+  margin: 0;
 }
 
 .submenu-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   padding: 0.5rem 1rem;
   text-decoration: none;
-  color: #6b7280;
+  color: #64748b;
   font-size: 0.875rem;
   transition: all 0.2s ease;
+  border-radius: 0.25rem;
+  margin: 0 0.5rem;
 }
 
 .submenu-link:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: #e2e8f0;
+  color: #475569;
 }
 
 .submenu-link.active {
-  color: #3b82f6;
-  background: #eff6ff;
-  border-left-color: #3b82f6;
+  color: #1e40af;
+  background: #dbeafe;
+  font-weight: 500;
+}
+
+.submenu-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  color: #64748b;
+  font-size: 0.875rem;
+  margin: 0 0.5rem;
+}
+
+.submenu-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: #94a3b8;
+}
+
+/* Submenu animations */
+.submenu-slide-enter-active,
+.submenu-slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.submenu-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0;
+}
+
+.submenu-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0;
+}
+
+.submenu-slide-enter-to,
+.submenu-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 1000px;
 }
 
 .sidebar-footer {
@@ -380,6 +481,34 @@ const sidebarClasses = computed(() => [
   border-top: 1px solid #e5e7eb;
   font-size: 0.875rem;
   color: #6b7280;
+}
+
+/* Icon styling */
+.nav-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: #6b7280;
+}
+
+.nav-link:hover .nav-icon {
+  color: #374151;
+}
+
+.nav-category {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.nav-category:hover {
+  background: none;
+}
+
+/* Icon alignment */
+.pi {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Responsive */

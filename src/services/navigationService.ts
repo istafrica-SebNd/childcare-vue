@@ -448,6 +448,243 @@ class NavigationService {
           requiredPermissions: ['view:messages'],
           order: 5
         }
+      ],
+      admin: [
+        {
+          id: 'dashboard',
+          label: 'Dashboard',
+          icon: 'pi pi-home',
+          route: '/admin/dashboard',
+          requiredPermissions: ['view:dashboard'],
+          order: 1
+        },
+        {
+          id: 'administration',
+          label: 'Administration',
+          icon: 'pi pi-cog',
+          requiredPermissions: ['manage:system'],
+          order: 2,
+          children: [
+            {
+              id: 'application-forms',
+              label: 'Application forms',
+              icon: 'pi pi-file',
+              route: '/admin/application-forms',
+              requiredPermissions: ['manage:applications'],
+              order: 1
+            },
+            {
+              id: 'approve',
+              label: 'Approve',
+              icon: 'pi pi-check',
+              route: '/admin/approve',
+              requiredPermissions: ['approve:applications'],
+              order: 2
+            },
+            {
+              id: 'childcare-member',
+              label: 'ChildcareMember',
+              icon: 'pi pi-users',
+              route: '/admin/childcare-member',
+              requiredPermissions: ['manage:members'],
+              order: 3
+            },
+            {
+              id: 'debt-management',
+              label: 'Debt management',
+              icon: 'pi pi-money-bill',
+              route: '/admin/debt-management',
+              requiredPermissions: ['manage:finances'],
+              order: 4
+            },
+            {
+              id: 'guarantee-list',
+              label: 'Guarantee List',
+              icon: 'pi pi-list',
+              route: '/admin/guarantee-list',
+              requiredPermissions: ['view:guarantees'],
+              order: 5
+            },
+            {
+              id: 'logs-admin',
+              label: 'Logs',
+              icon: 'pi pi-file-o',
+              route: '/admin/logs-admin',
+              requiredPermissions: ['view:logs'],
+              order: 6
+            },
+            {
+              id: 'manage-childinfo',
+              label: 'Manage childinfo...',
+              icon: 'pi pi-user-edit',
+              route: '/admin/manage-childinfo',
+              requiredPermissions: ['manage:children'],
+              order: 7
+            },
+            {
+              id: 'modified-application',
+              label: 'Modified applicati...',
+              icon: 'pi pi-file-edit',
+              route: '/admin/modified-application',
+              requiredPermissions: ['manage:applications'],
+              order: 8
+            },
+            {
+              id: 'queue-handling',
+              label: 'Queue handling',
+              icon: 'pi pi-sort',
+              route: '/admin/queue-handling',
+              requiredPermissions: ['manage:queues'],
+              order: 9
+            },
+            {
+              id: 'queue-exception',
+              label: 'Queueexception',
+              icon: 'pi pi-exclamation-triangle',
+              route: '/admin/queue-exception',
+              requiredPermissions: ['manage:queues'],
+              order: 10
+            },
+            {
+              id: 'stayrequest-job',
+              label: 'Stayrequest job',
+              icon: 'pi pi-calendar-plus',
+              route: '/admin/stayrequest-job',
+              requiredPermissions: ['manage:stay-requests'],
+              order: 11
+            },
+            {
+              id: 'suggested-admission',
+              label: 'Suggested admissi...',
+              icon: 'pi pi-lightbulb',
+              route: '/admin/suggested-admission',
+              requiredPermissions: ['manage:admissions'],
+              order: 12
+            },
+            {
+              id: 'unit-children-overview',
+              label: 'Unit children over...',
+              icon: 'pi pi-chart-bar',
+              route: '/admin/unit-children-overview',
+              requiredPermissions: ['view:reports'],
+              order: 13
+            },
+            {
+              id: 'activity-plans',
+              label: 'Activity plans',
+              icon: 'pi pi-calendar',
+              route: '/admin/activity-plans',
+              requiredPermissions: ['manage:activities'],
+              order: 14
+            }
+          ]
+        },
+        {
+          id: 'access-right',
+          label: 'Access Right',
+          icon: 'pi pi-shield',
+          requiredPermissions: ['manage:permissions'],
+          order: 3,
+          children: [
+            {
+              id: 'roles',
+              label: 'Roles',
+              icon: 'pi pi-users',
+              route: '/admin/roles',
+              requiredPermissions: ['manage:roles'],
+              order: 1
+            },
+            {
+              id: 'limited-roles',
+              label: 'Limited Roles',
+              icon: 'pi pi-user-minus',
+              route: '/admin/limited-roles',
+              requiredPermissions: ['manage:roles'],
+              order: 2
+            },
+            {
+              id: 'module-groups',
+              label: 'Module Groups',
+              icon: 'pi pi-th-large',
+              route: '/admin/module-groups',
+              requiredPermissions: ['manage:modules'],
+              order: 3
+            },
+            {
+              id: 'modules',
+              label: 'Modules',
+              icon: 'pi pi-box',
+              route: '/admin/modules',
+              requiredPermissions: ['manage:modules'],
+              order: 4
+            }
+          ]
+        },
+        {
+          id: 'admissions',
+          label: 'Admissions',
+          icon: 'pi pi-file',
+          requiredPermissions: ['manage:admissions'],
+          order: 4,
+          children: [
+            {
+              id: 'applications',
+              label: 'Applications',
+              icon: 'pi pi-file-edit',
+              route: '/admin/admissions/applications',
+              requiredPermissions: ['view:applications'],
+              order: 1
+            },
+            {
+              id: 'admissions-list',
+              label: 'Admissions',
+              icon: 'pi pi-users',
+              route: '/admin/admissions/list',
+              requiredPermissions: ['manage:admissions'],
+              order: 2
+            }
+          ]
+        },
+        {
+          id: 'person-register',
+          label: 'Person register',
+          icon: 'pi pi-user-plus',
+          route: '/admin/person-register',
+          requiredPermissions: ['manage:persons'],
+          order: 5
+        },
+        {
+          id: 'reports-export',
+          label: 'Report & export data',
+          icon: 'pi pi-chart-bar',
+          route: '/admin/reports',
+          requiredPermissions: ['view:reports'],
+          order: 6
+        },
+        {
+          id: 'logs',
+          label: 'Logs',
+          icon: 'pi pi-file-o',
+          route: '/admin/logs',
+          requiredPermissions: ['view:logs'],
+          order: 7
+        },
+        {
+          id: 'communication',
+          label: 'Communication',
+          icon: 'pi pi-comments',
+          route: '/admin/communications',
+          requiredPermissions: ['manage:communications'],
+          order: 8
+        },
+        {
+          id: 'settings',
+          label: 'Settings',
+          icon: 'pi pi-cog',
+          route: '/admin/settings',
+          requiredPermissions: ['manage:settings'],
+          order: 9
+        }
       ]
     }
 
