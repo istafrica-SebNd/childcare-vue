@@ -149,7 +149,25 @@ class PermissionService {
         'manage:permissions',
         'view:reports',
         'manage:system',
-        'view:audit'
+        'view:audit',
+        // Administration submenu permissions
+        'manage:applications',
+        'approve:applications',
+        'manage:members',
+        'manage:finances',
+        'view:guarantees',
+        'view:logs',
+        'manage:children',
+        'manage:queues',
+        'manage:stay-requests',
+        'manage:admissions',
+        'manage:activities',
+        // Access Right submenu permissions
+        'manage:modules',
+        // Other navigation permissions
+        'manage:persons',
+        'manage:communications',
+        'manage:settings'
       ]
     }
 

@@ -134,7 +134,7 @@ const mainClasses = computed(() => [
 
 .layout-main {
   flex: 1;
-  overflow-y: auto;
+  overflow: visible;
 }
 
 /* Variant styles (simpler than component registry) */

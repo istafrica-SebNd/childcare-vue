@@ -84,7 +84,7 @@ export const useLayout = () => {
         showBreadcrumb: true,
         showNotifications: true,
         sidebarCollapsible: true,
-        theme: 'dark'
+        theme: 'light'
       }
     }
 

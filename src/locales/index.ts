@@ -3,6 +3,22 @@ import { createI18n } from 'vue-i18n'
 const messages = {
   en: {
     common: {
+      labels: {
+        email: 'Email',
+        password: 'Password',
+        confirmPassword: 'Confirm Password',
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        phoneNumber: 'Phone Number',
+        address: 'Address',
+        postalCode: 'Postal Code',
+        city: 'City',
+        dateOfBirth: 'Date of Birth',
+        gender: 'Gender',
+        male: 'Male',
+        female: 'Female',
+        other: 'Other'
+      },
       status: {
         submitted: 'Submitted',
         placed: 'Placed',
@@ -13,16 +29,46 @@ const messages = {
         upcoming: 'Upcoming',
         paid: 'Paid',
         pending: 'Pending',
-        current: 'Current'
+        current: 'Current',
+        new: 'New',
+        approved: 'Approved',
+        active: 'Active',
+        inactive: 'Inactive'
       },
       unread: 'Unread',
-      profile: 'Profile',
+      notifications: 'Notifications',
+      messages: 'Messages',
       settings: 'Settings',
+      profile: 'Profile',
       logout: 'Logout',
+      loading: 'Loading...',
+      error: 'An error occurred',
+      success: 'Success',
+      warning: 'Warning',
+      info: 'Information',
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+      edit: 'Edit',
+      delete: 'Delete',
+      apply: 'Apply',
+      clear: 'Clear',
+      selectUnit: 'Select Unit',
+      allUnits: 'All Units',
+      filters: 'Filters',
+      selectDistrict: 'Select District',
+      allDistricts: 'All Districts',
+      showAll: 'Show all',
+      itemsPerPage: 'items per page',
+      pageOf: 'Page {current} of {total}',
+      approve: 'Approve',
+      reject: 'Reject',
+      save: 'Save',
       child: 'Child',
       duration: 'Duration',
       today: 'Today',
-      thisWeek: 'This Week'
+      thisWeek: 'This Week',
+      refresh: 'Refresh',
+      export: 'Export'
     },
     auth: {
       login: 'Login',
@@ -149,13 +195,172 @@ const messages = {
     },
     stats: {
       activeApplications: 'Active Applications',
-      placedChildren: 'Placed Children', 
+      placedChildren: 'Placed Children',
       pendingPayments: 'Pending Payments',
       unreadMessages: 'Unread Messages'
+    },
+    admin: {
+      dashboard: {
+        title: 'Municipality System Administration',
+        subtitle: 'Oslo Municipality - Central System Management',
+        municipalityAdmin: 'Municipality Admin',
+        microsoftEntraId: 'Microsoft Entra ID',
+        english: 'English',
+        administrator: 'Administrator',
+        kpis: {
+          totalDistricts: 'Total Districts',
+          active: 'Active',
+          systemUptime: 'System Uptime',
+          totalChildren: 'Total Children',
+          complianceScore: 'Compliance Score'
+        },
+        tabs: {
+          systemOverview: 'System Overview',
+          governance: 'Governance',
+          operations: 'Operations',
+          monitoring: 'Monitoring'
+        },
+        filters: {
+          allModules: 'All Modules',
+          systemConfig: 'System Config',
+          governance: 'Governance',
+          security: 'Security',
+          dataManagement: 'Data Management',
+          operations: 'Operations',
+          analytics: 'Analytics'
+        },
+        modules: {
+          globalSystemConfiguration: {
+            title: 'Global System Configuration',
+            description: 'System-wide parameters, feature flags, and global settings',
+            action: 'Configure'
+          },
+          districtOversight: {
+            title: 'District Oversight',
+            description: 'Monitor and manage all districts across the municipality',
+            action: 'Configure'
+          },
+          policyManagement: {
+            title: 'Policy Management',
+            description: 'Define municipality-wide policies and compliance rules',
+            action: 'Configure'
+          },
+          userRoleTemplates: {
+            title: 'User & Role Templates',
+            description: 'Manage system-wide user roles and permission templates',
+            action: 'Configure'
+          },
+          kindergartenClassification: {
+            title: 'Kindergarten Classification',
+            description: 'Manage kindergarten types, services, and master data',
+            action: 'Configure'
+          },
+          placementWindows: {
+            title: 'Placement Windows',
+            description: 'Configure application periods and placement windows',
+            action: 'Configure'
+          },
+          featureControlCenter: {
+            title: 'Feature Control Center',
+            description: 'Enable/disable features across all districts',
+            action: 'Configure'
+          },
+          securityCompliance: {
+            title: 'Security & Compliance',
+            description: 'GDPR compliance, audit logs, and security monitoring',
+            action: 'Configure'
+          },
+          analyticsDashboard: {
+            title: 'Analytics Dashboard',
+            description: 'Municipality-wide analytics and performance metrics',
+            action: 'Configure'
+          },
+          dataIntegration: {
+            title: 'Data Integration',
+            description: 'Manage external system integrations and data flows',
+            action: 'Configure'
+          },
+          communicationCenter: {
+            title: 'Communication Center',
+            description: 'Manage system-wide communications and notifications',
+            action: 'Configure'
+          },
+          systemReleases: {
+            title: 'System Releases',
+            description: 'Manage feature releases and system updates',
+            action: 'Configure'
+          }
+        }
+      },
+      approvals: {
+        title: 'Approval Management',
+        subtitle: 'Manage timetables and placement approvals',
+        requestForReplace: 'Request for a replace',
+        showOnlyCurrentUnits: 'Show only current units',
+        tabs: {
+          foreskola: 'Förskola',
+          fritidshem: 'Fritidshem'
+        },
+        actions: {
+          endRequest: 'End request',
+          requestForReplace: 'Request for replace',
+          rateCategoryAverageTime: 'Rate category/Average time',
+          timetable: 'Timetable',
+          reasontype: 'Reasontype',
+          leave: 'Leave',
+          approveReject: 'Approve/reject'
+        },
+        table: {
+          id: '#',
+          status: 'Status',
+          replaceUnit: 'Replace unit',
+          currentUnit: 'Current unit',
+          child: 'Child',
+          reqAdmissionEndDate: 'Req. admission end date',
+          reqNewAdmissionStartDate: 'Req. new admission start date',
+          reason: 'Reason',
+          submitDate: 'Submit date',
+          requestedBy: 'Requested by'
+        },
+        searchPlaceholder: 'ArnoldPreSchool2'
+      },
+      members: {
+        title: 'Childcare Member Management',
+        subtitle: 'Comprehensive management of childcare admissions and placements',
+        showActiveOnly: 'Show only active members',
+        tabs: {
+          children: 'Children',
+          guardians: 'Guardians'
+        },
+        actions: {
+          manageAdmissions: 'Manage admissions',
+          updateRecords: 'Update records',
+          generateReports: 'Generate reports',
+          exportData: 'Export data'
+        },
+        searchPlaceholder: 'Search members...',
+        exportData: 'Export Data'
+      }
     }
   },
   no: {
     common: {
+      labels: {
+        email: 'E-post',
+        password: 'Passord',
+        confirmPassword: 'Bekreft passord',
+        firstName: 'Fornavn',
+        lastName: 'Etternavn',
+        phoneNumber: 'Telefonnummer',
+        address: 'Adresse',
+        postalCode: 'Postnummer',
+        city: 'By',
+        dateOfBirth: 'Fødselsdato',
+        gender: 'Kjønn',
+        male: 'Mann',
+        female: 'Kvinne',
+        other: 'Annet'
+      },
       status: {
         submitted: 'Innsendt',
         placed: 'Plassert',
@@ -166,16 +371,46 @@ const messages = {
         upcoming: 'Kommende',
         paid: 'Betalt',
         pending: 'Venter',
-        current: 'Nåværende'
+        current: 'Nåværende',
+        new: 'Ny',
+        approved: 'Godkjent',
+        active: 'Aktiv',
+        inactive: 'Inaktiv'
       },
       unread: 'Ulest',
-      profile: 'Profil',
+      notifications: 'Varsler',
+      messages: 'Meldinger',
       settings: 'Innstillinger',
+      profile: 'Profil',
       logout: 'Logg ut',
+      loading: 'Laster...',
+      error: 'En feil oppstod',
+      success: 'Suksess',
+      warning: 'Advarsel',
+      info: 'Informasjon',
+      confirm: 'Bekreft',
+      cancel: 'Avbryt',
+      edit: 'Rediger',
+      delete: 'Slett',
+      apply: 'Anvend',
+      clear: 'Tøm',
+      selectUnit: 'Velg enhet',
+      allUnits: 'Alle enheter',
+      filters: 'Filtre',
+      selectDistrict: 'Velg bydel',
+      allDistricts: 'Alle bydeler',
+      showAll: 'Vis alle bydeler',
+      itemsPerPage: 'elementer per side',
+      pageOf: 'Side {current} av {total}',
+      approve: 'Godkjenn',
+      reject: 'Avslå',
+      save: 'Lagre',
       child: 'Barn',
       duration: 'Varighet',
       today: 'I dag',
-      thisWeek: 'Denne uken'
+      thisWeek: 'Denne uken',
+      refresh: 'Refresh',
+      export: 'Export'
     },
     auth: {
       login: 'Logg inn',
@@ -305,6 +540,149 @@ const messages = {
       placedChildren: 'Plasserte barn',
       pendingPayments: 'Ventende betalinger',
       unreadMessages: 'Uleste meldinger'
+    },
+    admin: {
+      dashboard: {
+        title: 'Kommunal systemadministrasjon',
+        subtitle: 'Oslo Kommune - Sentral systemhåndtering',
+        municipalityAdmin: 'Kommune Admin',
+        microsoftEntraId: 'Microsoft Entra ID',
+        english: 'Engelsk',
+        administrator: 'Administrator',
+        kpis: {
+          totalDistricts: 'Totale distrikter',
+          active: 'Aktive',
+          systemUptime: 'System oppetid',
+          totalChildren: 'Totale barn',
+          complianceScore: 'Compliance score'
+        },
+        tabs: {
+          systemOverview: 'Systemoversikt',
+          governance: 'Styring',
+          operations: 'Drift',
+          monitoring: 'Overvåking'
+        },
+        filters: {
+          allModules: 'Alle moduler',
+          systemConfig: 'Systemkonfigurasjon',
+          governance: 'Styring',
+          security: 'Sikkerhet',
+          dataManagement: 'Datahåndtering',
+          operations: 'Drift',
+          analytics: 'Analyse'
+        },
+        modules: {
+          globalSystemConfiguration: {
+            title: 'Global systemkonfigurasjon',
+            description: 'Systemdekkende parametere, funksjoner og globale innstillinger',
+            action: 'Konfigurer'
+          },
+          districtOversight: {
+            title: 'Distriktsoversikt',
+            description: 'Overvåk og administrer alle distrikter i kommunen',
+            action: 'Konfigurer'
+          },
+          policyManagement: {
+            title: 'Retningslinjer',
+            description: 'Definer kommunedekkende retningslinjer og compliance-regler',
+            action: 'Konfigurer'
+          },
+          userRoleTemplates: {
+            title: 'Bruker- og rollemaler',
+            description: 'Administrer systemdekkende brukerroller og tilgangsmaler',
+            action: 'Konfigurer'
+          },
+          kindergartenClassification: {
+            title: 'Barnehageklassifisering',
+            description: 'Administrer barnehagetyper, tjenester og hoveddata',
+            action: 'Konfigurer'
+          },
+          placementWindows: {
+            title: 'Plasseringsvinduer',
+            description: 'Konfigurer søknadsperioder og plasseringsvinduer',
+            action: 'Konfigurer'
+          },
+          featureControlCenter: {
+            title: 'Funksjonssentral',
+            description: 'Aktiver/deaktiver funksjoner på tvers av alle distrikter',
+            action: 'Konfigurer'
+          },
+          securityCompliance: {
+            title: 'Sikkerhet og compliance',
+            description: 'GDPR compliance, audit logger og sikkerhetsovervåking',
+            action: 'Konfigurer'
+          },
+          analyticsDashboard: {
+            title: 'Analysedashboard',
+            description: 'Kommunedekkende analyser og ytelsesmetrikker',
+            action: 'Konfigurer'
+          },
+          dataIntegration: {
+            title: 'Dataintegrasjon',
+            description: 'Administrer eksterne systemintegrasjoner og dataflyt',
+            action: 'Konfigurer'
+          },
+          communicationCenter: {
+            title: 'Kommunikasjonssenter',
+            description: 'Administrer systemdekkende kommunikasjon og varsler',
+            action: 'Konfigurer'
+          },
+          systemReleases: {
+            title: 'Systemutgivelser',
+            description: 'Administrer funksjonsutgivelser og systemoppdateringer',
+            action: 'Konfigurer'
+          }
+        }
+      },
+      approvals: {
+        title: 'Godkjenningsstyring',
+        subtitle: 'Administrer timeplaner og plasseringsgodkjenninger',
+        requestForReplace: 'Forespørsel om erstatning',
+        showOnlyCurrentUnits: 'Vis bare nåværende enheter',
+        tabs: {
+          foreskola: 'Förskola',
+          fritidshem: 'Fritidshem'
+        },
+        actions: {
+          endRequest: 'Avslutt forespørsel',
+          requestForReplace: 'Forespørsel om erstatning',
+          rateCategoryAverageTime: 'Rate kategori/Gjennomsnittlig tid',
+          timetable: 'Timeplan',
+          reasontype: 'Årsakstype',
+          leave: 'Permisjon',
+          approveReject: 'Godkjenn/avslå'
+        },
+        table: {
+          id: '#',
+          status: 'Status',
+          replaceUnit: 'Erstatningsenhet',
+          currentUnit: 'Nåværende enhet',
+          child: 'Barn',
+          reqAdmissionEndDate: 'Ønsket opptakssluttdato',
+          reqNewAdmissionStartDate: 'Ønsket ny opptaksstartdato',
+          reason: 'Årsak',
+          submitDate: 'Innsendingsdato',
+          requestedBy: 'Forespurt av'
+        },
+        searchPlaceholder: 'ArnoldPreSchool2 '
+      },
+      members: {
+        title: 'Childcare Member Management',
+        subtitle: 'Comprehensive management of childcare admissions and placements',
+        showActiveOnly: 'Vis bare aktive medlemmer',
+        tabs: {
+          children: 'Barn',
+          guardians: 'Vårdnadspersoner'
+        },
+        actions: {
+          manageAdmissions: 'Administrer opptak',
+          updateRecords: 'Oppdatere registreringer',
+          generateReports: 'Generere rapporter',
+          exportData: 'Eksporter data'
+        },
+        searchPlaceholder: 'Søk medlemmer...',
+        exportData: 'Eksporter Data'
+      }
     }
   }
 }
@@ -314,4 +692,4 @@ export const i18n = createI18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages
-}) 
+})

@@ -53,9 +53,7 @@ const toggleUserMenu = () => {
   showUserMenu.value = !showUserMenu.value
 }
 
-const handleBlurWithDelay = (callback: () => void) => {
-  setTimeout(callback, 150)
-}
+
 
 const selectLanguage = (language: typeof languages[0]) => {
   locale.value = language.code
@@ -138,7 +136,6 @@ onUnmounted(() => {
         <div class="dropdown-container" ref="languageDropdownRef">
           <button
             @click="toggleLanguageMenu"
-            @blur="handleBlurWithDelay(() => showLanguageMenu = false)"
             class="language-button"
           >
             <i class="pi pi-globe"></i>
@@ -163,7 +160,6 @@ onUnmounted(() => {
         <div class="dropdown-container" ref="userDropdownRef">
           <button
             @click="toggleUserMenu"
-            @blur="handleBlurWithDelay(() => showUserMenu = false)"
             class="user-button"
           >
             <div class="user-info">
@@ -346,6 +342,7 @@ onUnmounted(() => {
 
 .dropdown-container {
   position: relative;
+  z-index: 1000;
 }
 
 .language-button,
@@ -408,9 +405,10 @@ onUnmounted(() => {
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  z-index: 50;
+  z-index: 9999;
   min-width: 180px;
   overflow: hidden;
+  pointer-events: auto;
 }
 
 .language-menu {
@@ -434,7 +432,9 @@ onUnmounted(() => {
   cursor: pointer;
   transition: background-color 0.2s ease;
   font-size: 0.875rem;
-  z-index: 10;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .dropdown-item:hover {
